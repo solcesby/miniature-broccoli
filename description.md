@@ -33,3 +33,15 @@ The  **Nokia 3310**  is a  [GSM](https://en.wikipedia.org/wiki/GSM "GSM")  mobil
 |<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Nokia_3310_grey_inside_and_back_panel.jpg/1024px-Nokia_3310_grey_inside_and_back_panel.jpg" height="200">|
 |:--:|
 |*Inside a Nokia 3310 with the battery removed.*|
+
+## Similar devices
+* Nokia 3210
+* Nokia 3310 (2017)
+* Nokia 3315
+* Nokia 3320
+* Nokia 3330
+* Nokia 3350
+* Nokia 3360
+* Nokia 3361
+* Nokia 3390
+* Nokia 3395
