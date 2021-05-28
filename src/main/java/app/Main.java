@@ -2,6 +2,8 @@ package app;
 
 import app.api.MainMenu;
 
+import static app.api.enums.Page.MAIN;
+
 public class Main {
     public static void main(String[] args) {
         start();
@@ -9,6 +11,6 @@ public class Main {
 
     private static void start() {
         MainMenu mainMenu = new MainMenu();
-        mainMenu.showMainPage();
+        mainMenu.showPage(MAIN);
     }
 }
