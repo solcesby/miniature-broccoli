@@ -1,0 +1,25 @@
+package app.utils.processor.impl;
+
+import app.entity.Product;
+import app.entity.User;
+import app.utils.SecurityContextHolder;
+import app.utils.processor.Processor;
+
+import java.util.List;
+
+public class RemoveFromBasketProcessor implements Processor {
+    @Override
+    public boolean supports(String command) {
+        return "remove".equals(command.split(" ")[0]);
+    }
+
+    @Override
+    public void process(String command) {
+        final User user = SecurityContextHolder.getUser();
+        final Long id = Long.parseLong(command.split(" ")[1]);
+        final List<Product> userBasket = user.getBasket();
+
+        userBasket.removeIf(p -> id.equals(p.getId()));
+        user.setBasket(userBasket);
+    }
+}

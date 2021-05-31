@@ -1,8 +1,7 @@
 package app;
 
 import app.api.MainMenu;
-
-import static app.api.enums.Page.MAIN;
+import app.entity.User;
 
 public class Main {
     public static void main(String[] args) {
@@ -10,7 +9,8 @@ public class Main {
     }
 
     private static void start() {
-        MainMenu mainMenu = new MainMenu();
-        mainMenu.showPage(MAIN);
+        var user = new User();
+        var mainMenu = new MainMenu();
+        mainMenu.showMain(user);
     }
 }
