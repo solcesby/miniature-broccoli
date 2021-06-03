@@ -1,7 +1,7 @@
 package app.api;
 
-import app.entity.Product;
-import app.entity.User;
+import app.entity.product.Product;
+import app.entity.user.User;
 import app.service.ProductService;
 import app.service.UserService;
 import app.service.impl.ProductServiceImpl;
@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-import static app.entity.enums.Role.ADMIN;
-import static app.entity.enums.Role.USER;
+import static app.entity.user.enums.Role.ADMIN;
+import static app.entity.user.enums.Role.USER;
 
 public class MainMenu {
 

@@ -1,7 +1,7 @@
 package app;
 
 import app.api.MainMenu;
-import app.entity.User;
+import app.entity.user.User;
 
 public class Main {
     public static void main(String[] args) {
