@@ -1,6 +1,6 @@
 package app.service.impl;
 
-import app.entity.Product;
+import app.entity.product.Product;
 import app.repository.ProductRepository;
 import app.repository.impl.ProductRepositoryImpl;
 import app.service.ProductService;

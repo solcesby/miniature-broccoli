@@ -1,6 +1,6 @@
 package app.service.impl;
 
-import app.entity.User;
+import app.entity.user.User;
 import app.repository.UserRepository;
 import app.repository.impl.UserRepositoryImpl;
 import app.service.UserService;
