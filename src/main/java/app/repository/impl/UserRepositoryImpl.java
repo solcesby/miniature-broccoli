@@ -1,6 +1,6 @@
 package app.repository.impl;
 
-import app.entity.User;
+import app.entity.user.User;
 import app.repository.UserRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

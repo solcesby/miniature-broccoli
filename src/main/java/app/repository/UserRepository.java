@@ -1,6 +1,6 @@
 package app.repository;
 
-import app.entity.User;
+import app.entity.user.User;
 
 import java.util.List;
 

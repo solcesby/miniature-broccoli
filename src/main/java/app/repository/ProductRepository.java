@@ -1,6 +1,6 @@
 package app.repository;
 
-import app.entity.Product;
+import app.entity.product.Product;
 
 import java.util.List;
 

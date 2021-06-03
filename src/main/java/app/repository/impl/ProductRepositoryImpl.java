@@ -1,6 +1,6 @@
 package app.repository.impl;
 
-import app.entity.Product;
+import app.entity.product.Product;
 import app.repository.ProductRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
