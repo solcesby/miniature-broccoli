@@ -1,6 +1,7 @@
-package app.entity;
+package app.entity.user;
 
-import app.entity.enums.Role;
+import app.entity.product.Product;
+import app.entity.user.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;

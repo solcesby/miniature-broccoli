@@ -1,4 +1,4 @@
-package app.entity;
+package app.entity.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
