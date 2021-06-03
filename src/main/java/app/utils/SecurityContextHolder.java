@@ -1,6 +1,6 @@
 package app.utils;
 
-import app.entity.User;
+import app.entity.user.User;
 
 public class SecurityContextHolder {
 
