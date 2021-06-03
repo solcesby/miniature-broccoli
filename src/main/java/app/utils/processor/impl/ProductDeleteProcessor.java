@@ -5,7 +5,7 @@ import app.service.impl.ProductServiceImpl;
 import app.utils.SecurityContextHolder;
 import app.utils.processor.Processor;
 
-import static app.entity.enums.Role.ADMIN;
+import static app.entity.user.enums.Role.ADMIN;
 
 public class ProductDeleteProcessor implements Processor {
     private final ProductService productService = new ProductServiceImpl();

@@ -1,6 +1,6 @@
 package app.utils.processor.impl;
 
-import app.entity.Product;
+import app.entity.product.Product;
 import app.service.ProductService;
 import app.service.impl.ProductServiceImpl;
 import app.utils.SecurityContextHolder;
@@ -8,7 +8,7 @@ import app.utils.processor.Processor;
 
 import java.util.Scanner;
 
-import static app.entity.enums.Role.ADMIN;
+import static app.entity.user.enums.Role.ADMIN;
 
 public class ProductCreateProcessor implements Processor {
 

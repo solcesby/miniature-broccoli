@@ -1,7 +1,7 @@
 package app.utils.processor.impl;
 
-import app.entity.Product;
-import app.entity.User;
+import app.entity.product.Product;
+import app.entity.user.User;
 import app.service.ProductService;
 import app.service.impl.ProductServiceImpl;
 import app.utils.SecurityContextHolder;
