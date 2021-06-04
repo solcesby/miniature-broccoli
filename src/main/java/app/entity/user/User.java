@@ -39,8 +39,14 @@ public class User {
     private String password;
 
     @JsonIgnore
-    private boolean loggedIn;
-
-    @JsonIgnore
     private List<Product> basket = new ArrayList<>();
+
+    public User(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.role = user.getRole();
+    }
 }

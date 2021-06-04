@@ -1,4 +1,4 @@
-package app.utils.processor.impl;
+package app.utils.processor.impl.product;
 
 import app.entity.product.Product;
 import app.service.ProductService;
@@ -10,19 +10,18 @@ import java.util.Scanner;
 
 import static app.entity.user.enums.Role.ADMIN;
 
-public class ProductUpdateProcessor implements Processor {
+public class ProductCreateProcessor implements Processor {
+
     private final ProductService productService = new ProductServiceImpl();
 
     @Override
     public boolean supports(String command) {
-        return "product_update".equals(command.split(" ")[0]);
+        return "product_create".equals(command.split(" ")[0]);
     }
 
     @Override
     public void process(String command) {
         if (isAdmin()) {
-            final Long id = Long.parseLong(command.split(" ")[1]);
-            final Product productToUpdate = productService.getById(id);
             final Scanner sc = new Scanner(System.in);
 
             System.out.print("Name: ");
@@ -37,15 +36,15 @@ public class ProductUpdateProcessor implements Processor {
             final String description = sc.nextLine();
             System.out.println();
 
-            productToUpdate.setName(name);
-            productToUpdate.setPrice(price);
-            productToUpdate.setDescription(description);
-
-            productService.update(productToUpdate);
+            productService.save(Product.builder()
+                    .name(name)
+                    .price(price)
+                    .description(description)
+                    .build());
         }
     }
 
     private boolean isAdmin() {
-        return ADMIN.equals(SecurityContextHolder.getUser().getRole());
+        return ADMIN.equals(SecurityContextHolder.getCurrentUser().getRole());
     }
 }

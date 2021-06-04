@@ -1,4 +1,4 @@
-package app.utils.processor.impl;
+package app.utils.processor.impl.basket;
 
 import app.entity.product.Product;
 import app.entity.user.User;
@@ -19,7 +19,7 @@ public class AddToBasketProcessor implements Processor {
 
     @Override
     public void process(String command) {
-        final User user = SecurityContextHolder.getUser();
+        final User user = SecurityContextHolder.getCurrentUser();
         final Long id = Long.parseLong(command.split(" ")[1]);
         final Product product = productService.getById(id);
         List<Product> userBasket = user.getBasket();

@@ -88,14 +88,8 @@ public class UserRepositoryImpl implements UserRepository {
     @SneakyThrows
     public User update(final User user) {
         final List<User> userList = readJson();
-        final User updatedUser = getById(user.getId());
+        final User updatedUser = new User(user);
         final int index = userList.indexOf(updatedUser);
-
-        updatedUser.setName(user.getName());
-        updatedUser.setLastName(user.getLastName());
-        updatedUser.setRole(user.getRole());
-        updatedUser.setEmail(user.getEmail());
-        updatedUser.setPassword(user.getPassword());
 
         userList.set(index, updatedUser);
 
@@ -130,5 +124,6 @@ public class UserRepositoryImpl implements UserRepository {
 
         final User[] userArray = mapper.readValue(USERS_FILE, User[].class);
         return Arrays.stream(userArray).collect(Collectors.toList());
+//        return Arrays.asList(mapper.readValue(USERS_FILE, User[].class));
     }
 }

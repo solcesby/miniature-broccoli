@@ -1,4 +1,4 @@
-package app.utils.processor.impl;
+package app.utils.processor.impl.user;
 
 import app.entity.user.User;
 import app.service.UserService;
@@ -51,6 +51,6 @@ public class UserUpdateProcessor implements Processor {
     }
 
     private boolean isAdmin() {
-        return ADMIN.equals(SecurityContextHolder.getUser().getRole());
+        return ADMIN.equals(SecurityContextHolder.getCurrentUser().getRole());
     }
 }

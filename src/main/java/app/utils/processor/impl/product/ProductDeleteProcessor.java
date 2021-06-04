@@ -1,4 +1,4 @@
-package app.utils.processor.impl;
+package app.utils.processor.impl.product;
 
 import app.service.ProductService;
 import app.service.impl.ProductServiceImpl;
@@ -25,6 +25,6 @@ public class ProductDeleteProcessor implements Processor {
     }
 
     private boolean isAdmin() {
-        return ADMIN.equals(SecurityContextHolder.getUser().getRole());
+        return ADMIN.equals(SecurityContextHolder.getCurrentUser().getRole());
     }
 }

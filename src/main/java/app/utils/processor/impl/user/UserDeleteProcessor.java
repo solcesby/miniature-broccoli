@@ -1,4 +1,4 @@
-package app.utils.processor.impl;
+package app.utils.processor.impl.user;
 
 import app.service.UserService;
 import app.service.impl.UserServiceImpl;
@@ -26,6 +26,6 @@ public class UserDeleteProcessor implements Processor {
     }
 
     private boolean isAdmin() {
-        return ADMIN.equals(SecurityContextHolder.getUser().getRole());
+        return ADMIN.equals(SecurityContextHolder.getCurrentUser().getRole());
     }
 }

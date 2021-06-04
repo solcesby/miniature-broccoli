@@ -26,12 +26,10 @@ public class Product {
     @JsonProperty("description")
     private String description;
 
-    @Override
-    public String toString() {
-        return id + " | " + name + " | " + price + "$ | " + description;
-    }
-
-    public String toStringAtBasket() {
-        return id + " | " + name + " | " + price + "$";
+    public Product(Product product) {
+        this.id = product.getId();
+        this.name = product.getName();
+        this.price = product.getPrice();
+        this.description = product.getDescription();
     }
 }

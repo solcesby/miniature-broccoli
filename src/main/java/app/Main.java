@@ -1,7 +1,6 @@
 package app;
 
-import app.api.MainMenu;
-import app.entity.user.User;
+import app.api.Menu;
 
 public class Main {
     public static void main(String[] args) {
@@ -9,8 +8,7 @@ public class Main {
     }
 
     private static void start() {
-        var user = new User();
-        var mainMenu = new MainMenu();
-        mainMenu.showMain(user);
+        var mainMenu = new Menu();
+        mainMenu.show();
     }
 }

@@ -69,12 +69,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     @SneakyThrows
     public Product update(Product product) {
         final List<Product> productList = readJson();
-        final Product updatedProduct = getById(product.getId());
+        final Product updatedProduct = new Product(product);
         final int index = productList.indexOf(updatedProduct);
-
-        updatedProduct.setName(product.getName());
-        updatedProduct.setDescription(product.getDescription());
-        updatedProduct.setPrice(product.getPrice());
 
         productList.set(index, updatedProduct);
 
@@ -109,5 +105,6 @@ public class ProductRepositoryImpl implements ProductRepository {
 
         final Product[] productArray = mapper.readValue(PRODUCTS_FILE, Product[].class);
         return Arrays.stream(productArray).collect(Collectors.toList());
+//        return Arrays.asList(mapper.readValue(PRODUCTS_FILE, Product[].class));
     }
 }
