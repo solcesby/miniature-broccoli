@@ -2,44 +2,43 @@ package app.entity.user;
 
 import app.entity.product.Product;
 import app.entity.user.enums.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonRootName("user")
+@Table(name = "users")
 public class User {
 
-    @JsonProperty("id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonProperty("name")
+    @Column(name = "name")
     private String name;
 
-    @JsonProperty("last_name")
+    @Column(name = "last_name")
     private String lastName;
 
-    @JsonProperty("role")
+    @Column(name = "role")
     private Role role;
 
-    @JsonProperty("email")
+    @Column(name = "email")
     private String email;
 
-    @JsonProperty("password")
+    @Column(name = "password")
     private String password;
 
-    @JsonIgnore
-    private List<Product> basket = new ArrayList<>();
+    private transient List<Product> basket = new ArrayList<>();
 
     public User(User user) {
         this.id = user.getId();
@@ -50,3 +49,5 @@ public class User {
         this.role = user.getRole();
     }
 }
+
+

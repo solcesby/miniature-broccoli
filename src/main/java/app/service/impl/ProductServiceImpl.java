@@ -1,46 +1,47 @@
 package app.service.impl;
 
 import app.entity.product.Product;
-import app.exception.ProductNotFoundException;
 import app.repository.ProductRepository;
-import app.repository.impl.ProductRepositoryImpl;
 import app.service.ProductService;
-import lombok.SneakyThrows;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
+@AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
+
     private final ProductRepository productRepository;
 
-    public ProductServiceImpl() {
-        this.productRepository = new ProductRepositoryImpl();
-    }
-
     @Override
-    @SneakyThrows
+    @Transactional
     public List<Product> getAll() {
-        return productRepository.getAll().orElseThrow(ProductNotFoundException::new);
+        return null;
     }
 
     @Override
+    @Transactional
     public Product save(Product product) {
-        return productRepository.save(product).get();
+        return null;
     }
 
     @Override
-    @SneakyThrows
+    @Transactional
     public Product getById(Long id) {
-        return productRepository.getById(id).orElseThrow(() -> new ProductNotFoundException(id));
+        return null;
     }
 
     @Override
+    @Transactional
     public Product update(Product product) {
-        return productRepository.update(product).get();
+        return null;
     }
 
     @Override
-    @SneakyThrows
+    @Transactional
     public Product deleteById(Long id) {
-        return productRepository.deleteById(id).orElseThrow(() -> new ProductNotFoundException(id));
+        return null;
     }
 }

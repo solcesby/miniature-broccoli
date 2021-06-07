@@ -1,29 +1,31 @@
 package app.entity.product;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+
 @Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonRootName("product")
+@Table(name = "products")
 public class Product {
 
-    @JsonProperty("id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonProperty("name")
+    @Column(name = "name")
     private String name;
 
-    @JsonProperty("price")
+    @Column(name = "price")
     private Double price;
 
-    @JsonProperty("description")
+    @Column(name = "description")
     private String description;
 
     public Product(Product product) {
