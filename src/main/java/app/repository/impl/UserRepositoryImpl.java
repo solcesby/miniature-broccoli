@@ -2,13 +2,13 @@ package app.repository.impl;
 
 import app.entity.user.User;
 import app.repository.UserRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -122,8 +122,7 @@ public class UserRepositoryImpl implements UserRepository {
     private List<User> readJson() throws IOException {
         checkIfFileExistsAndNotEmpty();
 
-        final User[] userArray = mapper.readValue(USERS_FILE, User[].class);
-        return Arrays.stream(userArray).collect(Collectors.toList());
-//        return Arrays.asList(mapper.readValue(USERS_FILE, User[].class));
+        return mapper.readValue(USERS_FILE, new TypeReference<List<User>>() {
+        });
     }
 }

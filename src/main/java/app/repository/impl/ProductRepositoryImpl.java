@@ -2,13 +2,13 @@ package app.repository.impl;
 
 import app.entity.product.Product;
 import app.repository.ProductRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,8 +103,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     private List<Product> readJson() throws IOException {
         checkIfFileExistsAndNotEmpty();
 
-        final Product[] productArray = mapper.readValue(PRODUCTS_FILE, Product[].class);
-        return Arrays.stream(productArray).collect(Collectors.toList());
-//        return Arrays.asList(mapper.readValue(PRODUCTS_FILE, Product[].class));
+        return mapper.readValue(PRODUCTS_FILE, new TypeReference<List<Product>>() {
+        });
     }
 }
