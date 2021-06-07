@@ -3,17 +3,18 @@ package app.repository;
 import app.entity.product.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository {
 
-    List<Product> getAll();
+    Optional<List<Product>> getAll();
 
-    Product save(Product product);
+    Optional<Product> save(Product product);
 
-    Product getById(Long id);
+    Optional<Product> getById(Long id);
 
-    Product update(Product product);
+    Optional<Product> update(Product product);
 
-    Product deleteById(Long id);
+    Optional<Product> deleteById(Long id);
 
 }

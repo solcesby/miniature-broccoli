@@ -10,6 +10,7 @@ import lombok.SneakyThrows;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProductRepositoryImpl implements ProductRepository {
@@ -23,13 +24,13 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     @SneakyThrows
-    public List<Product> getAll() {
-        return readJson();
+    public Optional<List<Product>> getAll() {
+        return Optional.ofNullable(readJson());
     }
 
     @Override
     @SneakyThrows
-    public Product save(final Product productToSave) {
+    public Optional<Product> save(final Product productToSave) {
         if (!PRODUCTS_FILE.exists()) {
             var ignored = PRODUCTS_FILE.createNewFile();
         } else if (PRODUCTS_FILE.length() == 0) {
@@ -45,29 +46,30 @@ public class ProductRepositoryImpl implements ProductRepository {
 
             mapper.writerWithDefaultPrettyPrinter().writeValue(PRODUCTS_FILE, productList);
         }
-        return productToSave;
+        return Optional.ofNullable(productToSave);
     }
 
     @Override
     @SneakyThrows
-    public Product getById(final Long id) {
+    public Optional<Product> getById(final Long id) {
         final List<Product> productList = readJson();
         final List<Product> foundProducts = productList.stream().filter(p -> id.equals(p.getId()))
                 .collect(Collectors.toList());
 
-        if (foundProducts.size() == 0) {
+        if (foundProducts.isEmpty()) {
             System.out.printf("Product with id: %s not found!%n", id);
-            return null;
+            return Optional.empty();
         } else if (foundProducts.size() > 1) {
             System.out.printf("Product with id: %s found multiple times!%n", id);
+            return Optional.empty();
         }
 
-        return foundProducts.get(0);
+        return Optional.ofNullable(foundProducts.get(0));
     }
 
     @Override
     @SneakyThrows
-    public Product update(Product product) {
+    public Optional<Product> update(Product product) {
         final List<Product> productList = readJson();
         final Product updatedProduct = new Product(product);
         final int index = productList.indexOf(updatedProduct);
@@ -76,20 +78,31 @@ public class ProductRepositoryImpl implements ProductRepository {
 
         mapper.writerWithDefaultPrettyPrinter().writeValue(PRODUCTS_FILE, productList);
 
-        return updatedProduct;
+        return Optional.ofNullable(updatedProduct);
     }
 
     @Override
     @SneakyThrows
-    public Product deleteById(Long id) {
+    public Optional<Product> deleteById(Long id) {
         final List<Product> productList = readJson();
-        final Product productToDelete = getById(id);
+        final List<Product> foundProducts = productList.stream().filter(p -> id.equals(p.getId()))
+                .collect(Collectors.toList());
+
+        if (foundProducts.isEmpty()) {
+            System.out.printf("Product with id: %s not found!%n", id);
+            return Optional.empty();
+        } else if (foundProducts.size() > 1) {
+            System.out.printf("Product with id: %s found multiple times!%n", id);
+            return Optional.empty();
+        }
+
+        final Product productToDelete = foundProducts.get(0);
 
         productList.remove(productToDelete);
 
         mapper.writerWithDefaultPrettyPrinter().writeValue(PRODUCTS_FILE, productList);
 
-        return productToDelete;
+        return Optional.ofNullable(productToDelete);
     }
 
     private void checkIfFileExistsAndNotEmpty() throws IOException {

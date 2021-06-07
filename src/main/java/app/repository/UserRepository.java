@@ -3,19 +3,20 @@ package app.repository;
 import app.entity.user.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository {
 
-    List<User> getAll();
+    Optional<List<User>> getAll();
 
-    User save(User userToSave);
+    Optional<User> save(User userToSave);
 
-    User getById(Long id);
+    Optional<User> getById(Long id);
 
-    User getByEmail(String email);
+    Optional<User> getByEmail(String email);
 
-    User update(User user);
+    Optional<User> update(User user);
 
-    User deleteById(Long id);
+    Optional<User> deleteById(Long id);
 
 }

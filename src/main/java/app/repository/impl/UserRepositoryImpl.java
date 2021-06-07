@@ -10,6 +10,7 @@ import lombok.SneakyThrows;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class UserRepositoryImpl implements UserRepository {
@@ -23,13 +24,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     @SneakyThrows
-    public List<User> getAll() {
-        return readJson();
+    public Optional<List<User>> getAll() {
+        return Optional.ofNullable(readJson());
     }
 
     @Override
     @SneakyThrows
-    public User save(final User userToSave) {
+    public Optional<User> save(final User userToSave) {
         if (!USERS_FILE.exists()) {
             var ignored = USERS_FILE.createNewFile();
         } else if (USERS_FILE.length() == 0) {
@@ -46,47 +47,47 @@ public class UserRepositoryImpl implements UserRepository {
             mapper.writerWithDefaultPrettyPrinter().writeValue(USERS_FILE, userList);
         }
 
-        return userToSave;
+        return Optional.ofNullable(userToSave);
     }
 
     @Override
     @SneakyThrows
-    public User getById(final Long id) {
+    public Optional<User> getById(final Long id) {
         final List<User> userList = readJson();
         final List<User> foundUsers = userList.stream().filter(u -> id.equals(u.getId()))
                 .collect(Collectors.toList());
 
-        if (foundUsers.size() == 0) {
+        if (foundUsers.isEmpty()) {
             System.out.printf("User with id: %s not found!%n", id);
-            return null;
+            return Optional.empty();
         } else if (foundUsers.size() > 1) {
             System.out.printf("User with id: %s found multiple times!%n", id);
-            return null;
+            return Optional.empty();
         }
 
-        return foundUsers.get(0);
+        return Optional.ofNullable(foundUsers.get(0));
     }
 
     @Override
     @SneakyThrows
-    public User getByEmail(final String email) {
+    public Optional<User> getByEmail(final String email) {
         final List<User> userList = readJson();
         final List<User> foundUsers = userList.stream().filter(u -> email.equals(u.getEmail())).collect(Collectors.toList());
 
-        if (foundUsers.size() == 0) {
+        if (foundUsers.isEmpty()) {
             System.out.printf("User with email: %s not found!%n", email);
-            return null;
+            return Optional.empty();
         } else if (foundUsers.size() > 1) {
             System.out.printf("User with email: %s found multiple times!%n", email);
-            return null;
+            return Optional.empty();
         }
 
-        return foundUsers.get(0);
+        return Optional.ofNullable(foundUsers.get(0));
     }
 
     @Override
     @SneakyThrows
-    public User update(final User user) {
+    public Optional<User> update(final User user) {
         final List<User> userList = readJson();
         final User updatedUser = new User(user);
         final int index = userList.indexOf(updatedUser);
@@ -95,20 +96,31 @@ public class UserRepositoryImpl implements UserRepository {
 
         mapper.writerWithDefaultPrettyPrinter().writeValue(USERS_FILE, userList);
 
-        return updatedUser;
+        return Optional.ofNullable(updatedUser);
     }
 
     @Override
     @SneakyThrows
-    public User deleteById(final Long id) {
+    public Optional<User> deleteById(final Long id) {
         final List<User> userList = readJson();
-        final User userToDelete = getById(id);
+        final List<User> foundUsers = userList.stream().filter(u -> id.equals(u.getId()))
+                .collect(Collectors.toList());
+
+        if (foundUsers.isEmpty()) {
+            System.out.printf("User with id: %s not found!%n", id);
+            return Optional.empty();
+        } else if (foundUsers.size() > 1) {
+            System.out.printf("User with id: %s found multiple times!%n", id);
+            return Optional.empty();
+        }
+
+        final User userToDelete = foundUsers.get(0);
 
         userList.remove(userToDelete);
 
         mapper.writerWithDefaultPrettyPrinter().writeValue(USERS_FILE, userList);
 
-        return userToDelete;
+        return Optional.ofNullable(userToDelete);
     }
 
     private void checkIfFileExistsAndNotEmpty() throws IOException {
