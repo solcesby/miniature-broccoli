@@ -4,8 +4,7 @@ import app.service.ProductService;
 import app.service.impl.ProductServiceImpl;
 import app.utils.processor.Processor;
 
-import static app.utils.UserStateValidator.isAdmin;
-import static app.utils.UserStateValidator.isSignedIn;
+import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
 
 public class StorePageProcessor implements Processor {
     private final ProductService productService = new ProductServiceImpl();
@@ -17,9 +16,7 @@ public class StorePageProcessor implements Processor {
 
     @Override
     public void process(String command) {
-        if (isSignedIn() && isAdmin()) {
-            productService.getAll().forEach(System.out::println);
-        } else if (isSignedIn()) {
+        if (isCurrentUserSignedIn()) {
             productService.getAll().forEach(System.out::println);
         }
     }

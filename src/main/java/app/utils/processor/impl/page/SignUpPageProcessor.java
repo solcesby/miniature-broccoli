@@ -5,11 +5,13 @@ import app.service.UserService;
 import app.service.impl.UserServiceImpl;
 import app.utils.processor.Processor;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static app.entity.user.enums.Role.USER;
 import static app.utils.LineReader.readLine;
-import static app.utils.SecurityContextHolder.*;
+import static app.utils.SecurityContextHolder.getCurrentUser;
+import static app.utils.SecurityContextHolder.setCurrentUser;
 
 public class SignUpPageProcessor implements Processor {
     private final UserService userService = new UserServiceImpl();
@@ -25,10 +27,10 @@ public class SignUpPageProcessor implements Processor {
         String email = readLine();
         System.out.println();
 
-        final Optional<User> optionalUser = Optional.ofNullable(userService.getByEmail(email));
+        final Optional<User> optionalUser = userService.getByEmail(email);
 
         optionalUser.ifPresentOrElse(
-                (user) -> System.out.println("Email already taken!"),
+                user -> System.out.println("Email already taken!"),
                 () -> {
                     System.out.println("Password: ");
                     String password = readLine();
@@ -48,8 +50,8 @@ public class SignUpPageProcessor implements Processor {
                             .email(email)
                             .password(password)
                             .role(USER)
+                            .basket(new ArrayList<>())
                             .build());
-                    setCurrentUserSignedIn(true);
 
                     userService.save(getCurrentUser());
                 });

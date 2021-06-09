@@ -8,7 +8,4 @@ public class ProductNotFoundException extends Exception {
         super(format("Product with id %d not found", id));
     }
 
-    public ProductNotFoundException() {
-        super("No products found");
-    }
 }

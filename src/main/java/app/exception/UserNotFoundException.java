@@ -11,9 +11,4 @@ public class UserNotFoundException extends Exception {
         super(format("User with email %s not found", email));
     }
 
-    public UserNotFoundException() {
-        super("No users found");
-    }
-
-
 }

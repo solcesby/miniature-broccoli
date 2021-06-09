@@ -6,9 +6,8 @@ import java.util.List;
 
 import static app.api.enums.Page.LOGIN;
 import static app.utils.LineReader.readLine;
+import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
 import static app.utils.SecurityContextHolder.setCurrentUser;
-import static app.utils.SecurityContextHolder.setCurrentUserSignedIn;
-import static app.utils.UserStateValidator.isSignedIn;
 
 public class LoginPageProcessor implements Processor {
 
@@ -24,17 +23,16 @@ public class LoginPageProcessor implements Processor {
 
     @Override
     public void process(String command) {
-        if (isSignedIn()) {
+        if (isCurrentUserSignedIn()) {
             setCurrentUser(null);
-            setCurrentUserSignedIn(false);
         } else {
             System.out.println(LOGIN);
             final String input = readLine();
-            processors.forEach(p -> {
-                if (p.supports(input)) {
-                    p.process(input);
-                }
-            });
+
+            processors.stream().filter(processor -> processor.supports(input))
+                    .findAny().ifPresentOrElse(
+                    processor -> processor.process(input),
+                    () -> System.out.printf("Unknown command %s ", input));
         }
     }
 }
