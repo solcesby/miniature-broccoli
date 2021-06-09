@@ -1,11 +1,9 @@
 package app.utils.processor.impl.page;
 
-import app.entity.user.User;
 import app.utils.processor.Processor;
 
 import static app.utils.SecurityContextHolder.getCurrentUser;
-import static app.utils.UserStateValidator.isAdmin;
-import static app.utils.UserStateValidator.isSignedIn;
+import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
 
 public class ProfilePageProcessor implements Processor {
     @Override
@@ -15,14 +13,8 @@ public class ProfilePageProcessor implements Processor {
 
     @Override
     public void process(String command) {
-        final User user = getCurrentUser();
-        if (isSignedIn() && isAdmin()) {
-            System.out.printf("Id: %s%n" +
-                    "Name: %s%n" +
-                    "Last Name: %s%n" +
-                    "Email: %s%n" +
-                    "Role: %s%n", user.getId(), user.getName(), user.getLastName(), user.getEmail(), user.getRole());
-        } else if (isSignedIn()) {
+        final var user = getCurrentUser();
+        if (isCurrentUserSignedIn()) {
             System.out.printf("Id: %s%n" +
                     "Name: %s%n" +
                     "Last Name: %s%n" +

@@ -19,12 +19,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @SneakyThrows
     public List<Product> getAll() {
-        return productRepository.getAll().orElseThrow(ProductNotFoundException::new);
+        return productRepository.getAll();
     }
 
     @Override
     public Product save(Product product) {
-        return productRepository.save(product).get();
+        return productRepository.save(product).orElseThrow();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product update(Product product) {
-        return productRepository.update(product).get();
+        return productRepository.update(product).orElseThrow();
     }
 
     @Override

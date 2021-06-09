@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface UserRepository {
 
-    Optional<List<User>> getAll();
+    List<User> getAll();
 
     Optional<User> save(User userToSave);
 

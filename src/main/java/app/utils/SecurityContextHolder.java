@@ -5,7 +5,10 @@ import app.entity.user.User;
 public class SecurityContextHolder {
 
     private static User currentUser;
-    private static boolean currentUserSignedIn;
+
+    private SecurityContextHolder() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static User getCurrentUser() {
         return currentUser;
@@ -16,10 +19,6 @@ public class SecurityContextHolder {
     }
 
     public static boolean isCurrentUserSignedIn() {
-        return currentUserSignedIn;
-    }
-
-    public static void setCurrentUserSignedIn(boolean currentUserSignedIn) {
-        SecurityContextHolder.currentUserSignedIn = currentUserSignedIn;
+        return currentUser != null;
     }
 }

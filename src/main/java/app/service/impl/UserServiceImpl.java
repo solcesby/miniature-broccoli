@@ -8,6 +8,7 @@ import app.service.UserService;
 import lombok.SneakyThrows;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
 
@@ -20,12 +21,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @SneakyThrows
     public List<User> getAll() {
-        return userRepository.getAll().orElseThrow(UserNotFoundException::new);
+        return userRepository.getAll();
     }
 
     @Override
     public User save(User userToSave) {
-        return userRepository.save(userToSave).get();
+        return userRepository.save(userToSave).orElseThrow();
     }
 
     @Override
@@ -36,13 +37,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @SneakyThrows
-    public User getByEmail(String email) {
-        return userRepository.getByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+    public Optional<User> getByEmail(String email) {
+        return userRepository.getByEmail(email);
     }
 
     @Override
     public User update(User user) {
-        return userRepository.update(user).get();
+        return userRepository.update(user).orElseThrow();
     }
 
     @Override

@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import static app.utils.LineReader.readLine;
 import static app.utils.SecurityContextHolder.setCurrentUser;
-import static app.utils.SecurityContextHolder.setCurrentUserSignedIn;
 
 public class SignInPageProcessor implements Processor {
     private final UserService userService = new UserServiceImpl();
@@ -29,13 +28,12 @@ public class SignInPageProcessor implements Processor {
         final String password = readLine();
         System.out.println();
 
-        final Optional<User> optionalUser = Optional.ofNullable(userService.getByEmail(email));
+        final Optional<User> optionalUser = userService.getByEmail(email);
 
         optionalUser.ifPresentOrElse(
-                (user) -> {
+                user -> {
                     if (password.equals(user.getPassword())) {
                         setCurrentUser(user);
-                        setCurrentUserSignedIn(true);
                     }
                 },
                 () -> System.out.println("Wrong password!"));

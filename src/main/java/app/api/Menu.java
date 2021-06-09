@@ -15,8 +15,8 @@ import java.util.List;
 
 import static app.api.enums.Page.*;
 import static app.utils.LineReader.readLine;
+import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
 import static app.utils.UserStateValidator.isAdmin;
-import static app.utils.UserStateValidator.isSignedIn;
 
 public class Menu {
 
@@ -40,20 +40,25 @@ public class Menu {
     );
 
     public void show() {
-        while (true) {
-            if (isSignedIn() && isAdmin()) {
-                System.out.println(PANEL_ADMIN);
-            } else if (isSignedIn()) {
-                System.out.println(PANEL_SIGNED_IN);
-            } else {
-                System.out.println(PANEL);
-            }
-            final String input = readLine();
-            processors.forEach(p -> {
-                if (p.supports(input)) {
-                    p.process(input);
+        try {
+            while (true) {
+                if (isCurrentUserSignedIn() && isAdmin()) {
+                    System.out.println(PANEL_ADMIN);
+                } else if (isCurrentUserSignedIn()) {
+                    System.out.println(PANEL_SIGNED_IN);
+                } else {
+                    System.out.println(PANEL);
                 }
-            });
+                final String input = readLine();
+                processors.stream().filter(processor -> processor.supports(input))
+                        .findAny().ifPresentOrElse(
+                        processor -> processor.process(input),
+                        () -> System.out.printf("Unknown command %s ", input));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            show();
         }
     }
 }

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ProductRepository {
 
-    Optional<List<Product>> getAll();
+    List<Product> getAll();
 
     Optional<Product> save(Product product);
 
