@@ -1,8 +1,22 @@
 package app.repository;
 
 import app.entity.user.User;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface UserRepository {
+
+    List<User> getAll();
+
+    Optional<User> save(User userToSave);
+
+    Optional<User> getById(Long id);
+
+    Optional<User> getByEmail(String email);
+
+    Optional<User> update(User user);
+
+    void deleteById(Long id);
 
 }

@@ -8,7 +8,6 @@ import app.utils.processor.Processor;
 import static app.entity.user.enums.Role.ADMIN;
 
 public class UserDeleteProcessor implements Processor {
-
     private final UserService userService = new UserServiceImpl();
 
     @Override

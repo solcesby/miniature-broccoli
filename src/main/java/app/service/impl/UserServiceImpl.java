@@ -1,53 +1,48 @@
 package app.service.impl;
 
 import app.entity.user.User;
+import app.exception.UserNotFoundException;
 import app.repository.UserRepository;
+import app.repository.impl.UserRepositoryImpl;
 import app.service.UserService;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.SneakyThrows;
 
 import java.util.List;
+import java.util.Optional;
 
-@Service
-@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    private final UserRepository userRepository = new UserRepositoryImpl();
 
     @Override
-    @Transactional
     public List<User> getAll() {
-        return null;
+        return userRepository.getAll();
     }
 
     @Override
-    @Transactional
     public User save(User userToSave) {
-        return null;
+        return userRepository.save(userToSave).orElseThrow();
     }
 
     @Override
-    @Transactional
+    @SneakyThrows
     public User getById(Long id) {
-        return null;
+        return userRepository.getById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Override
-    @Transactional
-    public User getByEmail(String email) {
-        return null;
+    public Optional<User> getByEmail(String email) {
+        return userRepository.getByEmail(email);
     }
 
     @Override
-    @Transactional
+    @SneakyThrows
     public User update(User user) {
-        return null;
+        return userRepository.update(user).orElseThrow(() -> new UserNotFoundException(user.getId()));
     }
 
     @Override
-    @Transactional
-    public User deleteById(Long id) {
-        return null;
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 }

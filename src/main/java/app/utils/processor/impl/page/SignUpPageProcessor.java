@@ -1,6 +1,7 @@
 package app.utils.processor.impl.page;
 
 import app.entity.user.User;
+import app.entity.user.enums.Role;
 import app.service.UserService;
 import app.service.impl.UserServiceImpl;
 import app.utils.processor.Processor;
@@ -8,7 +9,6 @@ import app.utils.processor.Processor;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static app.entity.user.enums.Role.USER;
 import static app.utils.LineReader.readLine;
 import static app.utils.SecurityContextHolder.getCurrentUser;
 import static app.utils.SecurityContextHolder.setCurrentUser;
@@ -49,7 +49,7 @@ public class SignUpPageProcessor implements Processor {
                             .lastName(lastName)
                             .email(email)
                             .password(password)
-                            .role(USER)
+                            .role(Role.USER)
                             .basket(new ArrayList<>())
                             .build());
 

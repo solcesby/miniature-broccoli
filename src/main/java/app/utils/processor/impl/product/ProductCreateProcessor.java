@@ -11,7 +11,6 @@ import java.util.Scanner;
 import static app.entity.user.enums.Role.ADMIN;
 
 public class ProductCreateProcessor implements Processor {
-
     private final ProductService productService = new ProductServiceImpl();
 
     @Override
