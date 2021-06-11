@@ -3,6 +3,7 @@ package app.repository.impl;
 import app.entity.user.User;
 import app.repository.UserRepository;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +14,9 @@ import java.util.Optional;
 
 import static app.mapper.UserMapper.mapToEntity;
 import static app.utils.ConnectionUtil.getConnection;
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
+@Log4j2
 public class UserRepositoryImpl implements UserRepository {
 
     private static final String INSERT = "INSERT INTO users (name, last_name, role, email, password) " +
@@ -45,25 +48,33 @@ public class UserRepositoryImpl implements UserRepository {
                 userList.add(mapToEntity(rs));
             }
         }
+
+        log.info("{} users were found", userList.size());
         return userList;
     }
 
     @Override
     @SneakyThrows
     public Optional<User> save(User userToSave) {
-        User savedUser = null;
         try (Connection connection = getConnection();
-             PreparedStatement ps = connection.prepareStatement(INSERT)) {
+             PreparedStatement ps = connection.prepareStatement(INSERT, RETURN_GENERATED_KEYS)) {
             ps.setString(1, userToSave.getName());
             ps.setString(2, userToSave.getLastName());
             ps.setString(3, userToSave.getRole().name());
             ps.setString(4, userToSave.getEmail());
             ps.setString(5, userToSave.getPassword());
 
-            ps.execute();
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    userToSave.setId(rs.getLong("id"));
+                }
+            }
         }
 
-        return Optional.ofNullable(savedUser);
+        log.info("{} successfully saved", userToSave);
+        return Optional.of(userToSave);
     }
 
     @Override
@@ -81,6 +92,8 @@ public class UserRepositoryImpl implements UserRepository {
                 }
             }
         }
+
+        log.info("found {} by id {}", user, id);
         return Optional.ofNullable(user);
     }
 
@@ -99,6 +112,8 @@ public class UserRepositoryImpl implements UserRepository {
                 }
             }
         }
+
+        log.info("found {} by email {}", user, email);
         return Optional.ofNullable(user);
     }
 
@@ -114,9 +129,10 @@ public class UserRepositoryImpl implements UserRepository {
             ps.setString(5, user.getPassword());
             ps.setLong(6, user.getId());
 
-            ps.execute();
+            ps.executeUpdate();
         }
 
+        log.info("{} successfully updated", user);
         return Optional.of(user);
     }
 
@@ -127,7 +143,8 @@ public class UserRepositoryImpl implements UserRepository {
              PreparedStatement ps = connection.prepareStatement(DELETE)) {
             ps.setLong(1, id);
 
-            ps.execute();
+            ps.executeUpdate();
         }
+        log.info("user with id {} deleted", id);
     }
 }

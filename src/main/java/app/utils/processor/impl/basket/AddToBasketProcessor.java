@@ -4,11 +4,15 @@ import app.entity.product.Product;
 import app.entity.user.User;
 import app.service.ProductService;
 import app.service.impl.ProductServiceImpl;
-import app.utils.SecurityContextHolder;
 import app.utils.processor.Processor;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 
+import static app.utils.SecurityContextHolder.getCurrentUser;
+import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
+
+@Log4j2
 public class AddToBasketProcessor implements Processor {
     private final ProductService productService = new ProductServiceImpl();
 
@@ -19,12 +23,15 @@ public class AddToBasketProcessor implements Processor {
 
     @Override
     public void process(String command) {
-        final User user = SecurityContextHolder.getCurrentUser();
-        final Long id = Long.parseLong(command.split(" ")[1]);
-        final Product product = productService.getById(id);
-        List<Product> userBasket = user.getBasket();
+        if ((isCurrentUserSignedIn())) {
+            final User user = getCurrentUser();
+            final Long id = Long.parseLong(command.split(" ")[1]);
+            final Product product = productService.getById(id);
+            List<Product> userBasket = user.getBasket();
 
-        userBasket.add(product);
-        user.setBasket(userBasket);
+            userBasket.add(product);
+            user.setBasket(userBasket);
+            log.info("{} successfully added to basket of {}", product, user);
+        }
     }
 }

@@ -8,7 +8,7 @@ public interface ProductService {
 
     List<Product> getAll();
 
-    Product save(Product product);
+    Product save(Product productToSave);
 
     Product getById(Long id);
 

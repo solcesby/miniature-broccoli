@@ -4,9 +4,12 @@ import app.service.ProductService;
 import app.service.impl.ProductServiceImpl;
 import app.utils.SecurityContextHolder;
 import app.utils.processor.Processor;
+import lombok.extern.log4j.Log4j2;
 
 import static app.entity.user.enums.Role.ADMIN;
+import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
 
+@Log4j2
 public class ProductDeleteProcessor implements Processor {
     private final ProductService productService = new ProductServiceImpl();
 
@@ -17,7 +20,7 @@ public class ProductDeleteProcessor implements Processor {
 
     @Override
     public void process(String command) {
-        if (isAdmin()) {
+        if (isCurrentUserSignedIn() && isAdmin()) {
             final Long id = Long.parseLong(command.split(" ")[1]);
 
             productService.deleteById(id);
