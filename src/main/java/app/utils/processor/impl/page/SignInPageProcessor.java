@@ -3,15 +3,11 @@ package app.utils.processor.impl.page;
 import app.entity.user.User;
 import app.service.UserService;
 import app.service.impl.UserServiceImpl;
-import app.utils.Constants;
 import app.utils.processor.Processor;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Optional;
-import java.util.regex.Pattern;
 
-import static app.utils.Constants.EMAIL_REGEX;
-import static app.utils.Constants.PASSWORD_REGEX;
 import static app.utils.LineReader.readLine;
 import static app.utils.SecurityContextHolder.setCurrentUser;
 
@@ -30,19 +26,9 @@ public class SignInPageProcessor implements Processor {
         final String email = readLine();
         System.out.println();
 
-        if (!Pattern.matches(EMAIL_REGEX, email)) {
-            System.out.println("Incorrect email!");
-            return;
-        }
-
         System.out.println("Password: ");
         final String password = readLine();
         System.out.println();
-
-        if (!Pattern.matches(PASSWORD_REGEX, password)) {
-            System.out.println("Incorrect password!");
-            return;
-        }
 
         final Optional<User> optionalUser = userService.getByEmail(email);
 

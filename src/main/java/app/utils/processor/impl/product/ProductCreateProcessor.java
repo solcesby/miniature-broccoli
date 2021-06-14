@@ -5,7 +5,6 @@ import app.service.ProductService;
 import app.service.impl.ProductServiceImpl;
 import app.utils.SecurityContextHolder;
 import app.utils.processor.Processor;
-import app.utils.validators.ProductValidator;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Scanner;

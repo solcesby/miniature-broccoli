@@ -5,7 +5,6 @@ import app.service.UserService;
 import app.service.impl.UserServiceImpl;
 import app.utils.SecurityContextHolder;
 import app.utils.processor.Processor;
-import app.utils.validators.UserValidator;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Scanner;
