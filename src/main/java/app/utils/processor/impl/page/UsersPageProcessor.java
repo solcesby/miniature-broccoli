@@ -6,7 +6,7 @@ import app.utils.processor.Processor;
 import lombok.extern.log4j.Log4j2;
 
 import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
-import static app.utils.UserStateValidator.isAdmin;
+import static app.utils.validators.UserStateValidator.isAdmin;
 
 @Log4j2
 public class UsersPageProcessor implements Processor {

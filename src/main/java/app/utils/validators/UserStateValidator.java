@@ -1,4 +1,4 @@
-package app.utils;
+package app.utils.validators;
 
 import lombok.extern.log4j.Log4j2;
 

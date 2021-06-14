@@ -5,15 +5,14 @@ import app.service.ProductService;
 import app.service.impl.ProductServiceImpl;
 import app.utils.SecurityContextHolder;
 import app.utils.processor.Processor;
+import app.utils.validators.ProductValidator;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 import static app.entity.user.enums.Role.ADMIN;
-import static app.utils.Constants.NAME_REGEX;
-import static app.utils.Constants.PRICE_REGEX;
 import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
+import static app.utils.validators.ProductValidator.validate;
 
 @Log4j2
 public class ProductCreateProcessor implements Processor {
@@ -33,32 +32,23 @@ public class ProductCreateProcessor implements Processor {
             final String name = sc.nextLine();
             System.out.println();
 
-            if (!Pattern.matches(NAME_REGEX, name)) {
-                System.out.println("Incorrect name!");
-                return;
-            } else if (productService.getAll().stream().anyMatch(p -> p.getName().equalsIgnoreCase(name))) {
-                System.out.println("Product already exists!");
-                return;
-            }
-
             System.out.print("Price: ");
             final Double price = Double.parseDouble(sc.nextLine());
             System.out.println();
-
-            if (!Pattern.matches(PRICE_REGEX, price.toString())) {
-                System.out.println("Incorrect price!");
-                return;
-            }
 
             System.out.print("Description: ");
             final String description = sc.nextLine();
             System.out.println();
 
-            productService.save(Product.builder()
+            final Product productToSave = Product.builder()
                     .name(name)
                     .price(price)
                     .description(description)
-                    .build());
+                    .build();
+
+            validate(productToSave);
+
+            productService.save(productToSave);
         }
     }
 

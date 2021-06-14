@@ -17,7 +17,7 @@ import java.util.List;
 import static app.api.enums.Page.*;
 import static app.utils.LineReader.readLine;
 import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
-import static app.utils.UserStateValidator.isAdmin;
+import static app.utils.validators.UserStateValidator.isAdmin;
 
 @Log4j2
 public class Menu {
