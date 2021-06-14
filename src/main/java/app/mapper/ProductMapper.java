@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 public class ProductMapper {
 
     @SneakyThrows
-    public static Product mapToEntity(ResultSet rs) {
+    public Product mapToEntity(ResultSet rs) {
         log.info("mapping result set of {}", rs);
         return Product.builder()
                 .id(rs.getLong("id"))

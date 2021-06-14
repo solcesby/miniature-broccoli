@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class UserMapper {
 
     @SneakyThrows
-    public static User mapToEntity(ResultSet rs) {
+    public User mapToEntity(ResultSet rs) {
         log.info("mapping result set of {}", rs);
         return User.builder()
                 .id(rs.getLong("id"))

@@ -1,6 +1,7 @@
 package app.repository.impl;
 
 import app.entity.user.User;
+import app.mapper.UserMapper;
 import app.repository.Repository;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -12,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static app.mapper.UserMapper.mapToEntity;
 import static app.utils.ConnectionUtil.getConnection;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 @Log4j2
 public class UserRepository implements Repository<User, Long> {
 
+    private static final UserMapper mapper = new UserMapper();
     private static final String INSERT = "INSERT INTO users (name, last_name, role, email, password) " +
             "VALUES (?,?,?,?,?);";
     private static final String SELECT_ALL = "SELECT * FROM users;";
@@ -45,7 +46,7 @@ public class UserRepository implements Repository<User, Long> {
              PreparedStatement ps = connection.prepareStatement(SELECT_ALL);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                userList.add(mapToEntity(rs));
+                userList.add(mapper.mapToEntity(rs));
             }
         }
 
@@ -88,7 +89,7 @@ public class UserRepository implements Repository<User, Long> {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    user = mapToEntity(rs);
+                    user = mapper.mapToEntity(rs);
                 }
             }
         }
@@ -138,7 +139,7 @@ public class UserRepository implements Repository<User, Long> {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    user = mapToEntity(rs);
+                    user = mapper.mapToEntity(rs);
                 }
             }
         }

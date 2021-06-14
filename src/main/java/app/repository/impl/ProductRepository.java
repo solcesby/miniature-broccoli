@@ -1,6 +1,7 @@
 package app.repository.impl;
 
 import app.entity.product.Product;
+import app.mapper.ProductMapper;
 import app.repository.Repository;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -12,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static app.mapper.ProductMapper.mapToEntity;
 import static app.utils.ConnectionUtil.getConnection;
 
 @Log4j2
 public class ProductRepository implements Repository<Product, Long> {
 
+    private static final ProductMapper mapper = new ProductMapper();
     private static final String INSERT = "INSERT INTO products (name, price, description) " +
             "VALUES (?,?,?);";
     private static final String SELECT_ALL = "SELECT * FROM products;";
@@ -41,7 +42,7 @@ public class ProductRepository implements Repository<Product, Long> {
              PreparedStatement ps = connection.prepareStatement(SELECT_ALL);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                productList.add(mapToEntity(rs));
+                productList.add(mapper.mapToEntity(rs));
             }
         }
 
@@ -76,7 +77,7 @@ public class ProductRepository implements Repository<Product, Long> {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    product = mapToEntity(rs);
+                    product = mapper.mapToEntity(rs);
                 }
             }
         }
