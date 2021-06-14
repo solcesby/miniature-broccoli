@@ -13,6 +13,7 @@ import java.util.Optional;
 import static app.utils.LineReader.readLine;
 import static app.utils.SecurityContextHolder.getCurrentUser;
 import static app.utils.SecurityContextHolder.setCurrentUser;
+import static app.utils.validators.UserValidator.validate;
 
 @Log4j2
 public class SignUpPageProcessor implements Processor {
@@ -54,6 +55,8 @@ public class SignUpPageProcessor implements Processor {
                             .role(Role.USER)
                             .basket(new ArrayList<>())
                             .build();
+
+                    validate(userToSave);
 
                     setCurrentUser(userToSave);
 
