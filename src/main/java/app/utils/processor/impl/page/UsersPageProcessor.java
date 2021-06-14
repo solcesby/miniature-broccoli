@@ -1,7 +1,6 @@
 package app.utils.processor.impl.page;
 
-import app.service.UserService;
-import app.service.impl.UserServiceImpl;
+import app.service.impl.UserService;
 import app.utils.processor.Processor;
 import lombok.extern.log4j.Log4j2;
 
@@ -10,7 +9,7 @@ import static app.utils.validators.UserStateValidator.isAdmin;
 
 @Log4j2
 public class UsersPageProcessor implements Processor {
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService = new UserService();
 
     @Override
     public boolean supports(String command) {

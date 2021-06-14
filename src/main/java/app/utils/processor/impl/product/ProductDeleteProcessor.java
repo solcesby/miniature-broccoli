@@ -1,7 +1,6 @@
 package app.utils.processor.impl.product;
 
-import app.service.ProductService;
-import app.service.impl.ProductServiceImpl;
+import app.service.impl.ProductService;
 import app.utils.SecurityContextHolder;
 import app.utils.processor.Processor;
 import lombok.extern.log4j.Log4j2;
@@ -11,7 +10,7 @@ import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
 
 @Log4j2
 public class ProductDeleteProcessor implements Processor {
-    private final ProductService productService = new ProductServiceImpl();
+    private final ProductService productService = new ProductService();
 
     @Override
     public boolean supports(String command) {

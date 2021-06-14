@@ -1,7 +1,7 @@
 package app.repository.impl;
 
 import app.entity.user.User;
-import app.repository.UserRepository;
+import app.repository.Repository;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -17,7 +17,7 @@ import static app.utils.ConnectionUtil.getConnection;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 @Log4j2
-public class UserRepositoryImpl implements UserRepository {
+public class UserRepository implements Repository<User, Long> {
 
     private static final String INSERT = "INSERT INTO users (name, last_name, role, email, password) " +
             "VALUES (?,?,?,?,?);";
@@ -99,26 +99,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     @SneakyThrows
-    public Optional<User> getByEmail(String email) {
-        User user = null;
-
-        try (Connection connection = getConnection();
-             PreparedStatement ps = connection.prepareStatement(SELECT_BY_EMAIL)) {
-            ps.setString(1, email);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    user = mapToEntity(rs);
-                }
-            }
-        }
-
-        log.info("found {} by email {}", user, email);
-        return Optional.ofNullable(user);
-    }
-
-    @Override
-    @SneakyThrows
     public Optional<User> update(User user) {
         try (Connection connection = getConnection();
              PreparedStatement ps = connection.prepareStatement(UPDATE)) {
@@ -146,5 +126,24 @@ public class UserRepositoryImpl implements UserRepository {
             ps.executeUpdate();
         }
         log.info("user with id {} deleted", id);
+    }
+
+    @SneakyThrows
+    public Optional<User> getByEmail(String email) {
+        User user = null;
+
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement(SELECT_BY_EMAIL)) {
+            ps.setString(1, email);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    user = mapToEntity(rs);
+                }
+            }
+        }
+
+        log.info("found {} by email {}", user, email);
+        return Optional.ofNullable(user);
     }
 }

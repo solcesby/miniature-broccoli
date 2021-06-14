@@ -1,8 +1,7 @@
 package app.utils.validators;
 
 import app.entity.product.Product;
-import app.service.ProductService;
-import app.service.impl.ProductServiceImpl;
+import app.service.impl.ProductService;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.regex.Pattern;
@@ -12,7 +11,7 @@ import static app.utils.Constants.PRICE_REGEX;
 
 @Log4j2
 public class ProductValidator {
-    private static final ProductService productService = new ProductServiceImpl();
+    private static final ProductService productService = new ProductService();
 
     private ProductValidator() {
         log.warn("utility class constructor called");

@@ -1,8 +1,7 @@
 package app.utils.processor.impl.user;
 
 import app.entity.user.User;
-import app.service.UserService;
-import app.service.impl.UserServiceImpl;
+import app.service.impl.UserService;
 import app.utils.SecurityContextHolder;
 import app.utils.processor.Processor;
 import lombok.extern.log4j.Log4j2;
@@ -15,7 +14,7 @@ import static app.utils.validators.UserValidator.validate;
 
 @Log4j2
 public class UserUpdateProcessor implements Processor {
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService = new UserService();
 
     @Override
     public boolean supports(String command) {

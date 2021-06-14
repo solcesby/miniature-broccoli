@@ -1,7 +1,7 @@
 package app.repository.impl;
 
 import app.entity.product.Product;
-import app.repository.ProductRepository;
+import app.repository.Repository;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -16,7 +16,7 @@ import static app.mapper.ProductMapper.mapToEntity;
 import static app.utils.ConnectionUtil.getConnection;
 
 @Log4j2
-public class ProductRepositoryImpl implements ProductRepository {
+public class ProductRepository implements Repository<Product, Long> {
 
     private static final String INSERT = "INSERT INTO products (name, price, description) " +
             "VALUES (?,?,?);";

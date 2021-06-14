@@ -2,18 +2,17 @@ package app.service.impl;
 
 import app.entity.product.Product;
 import app.exception.ProductNotFoundException;
-import app.repository.ProductRepository;
-import app.repository.impl.ProductRepositoryImpl;
-import app.service.ProductService;
+import app.repository.impl.ProductRepository;
+import app.service.Service;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 
 @Log4j2
-public class ProductServiceImpl implements ProductService {
+public class ProductService implements Service<Product, Long> {
 
-    private final ProductRepository productRepository = new ProductRepositoryImpl();
+    private final ProductRepository productRepository = new ProductRepository();
 
     @Override
     public List<Product> getAll() {
