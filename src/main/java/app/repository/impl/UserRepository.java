@@ -1,6 +1,7 @@
 package app.repository.impl;
 
 import app.entity.user.User;
+import app.mapper.Mapper;
 import app.mapper.UserMapper;
 import app.repository.Repository;
 import lombok.SneakyThrows;
@@ -9,21 +10,17 @@ import lombok.extern.log4j.Log4j2;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static app.utils.ConnectionUtil.getConnection;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 @Log4j2
-public class UserRepository implements Repository<User, Long> {
+public class UserRepository extends Repository<User, Long> {
 
     private static final UserMapper mapper = new UserMapper();
     private static final String INSERT = "INSERT INTO users (name, last_name, role, email, password) " +
             "VALUES (?,?,?,?,?);";
-    private static final String SELECT_ALL = "SELECT * FROM users;";
-    private static final String SELECT_BY_ID = "SELECT * FROM users WHERE id = ?;";
     private static final String SELECT_BY_EMAIL = "SELECT * FROM users WHERE email = ?;";
     private static final String UPDATE = "UPDATE users " +
             "SET " +
@@ -33,26 +30,6 @@ public class UserRepository implements Repository<User, Long> {
             "email = ?, " +
             "password = ? " +
             "WHERE id = ?;";
-    private static final String DELETE = "DELETE " +
-            "FROM users " +
-            "WHERE id = ?;";
-
-    @Override
-    @SneakyThrows
-    public List<User> getAll() {
-        final List<User> userList = new ArrayList<>();
-
-        try (Connection connection = getConnection();
-             PreparedStatement ps = connection.prepareStatement(SELECT_ALL);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                userList.add(mapper.mapToEntity(rs));
-            }
-        }
-
-        log.info("{} users were found", userList.size());
-        return userList;
-    }
 
     @Override
     @SneakyThrows
@@ -80,26 +57,6 @@ public class UserRepository implements Repository<User, Long> {
 
     @Override
     @SneakyThrows
-    public Optional<User> getById(Long id) {
-        User user = null;
-
-        try (Connection connection = getConnection();
-             PreparedStatement ps = connection.prepareStatement(SELECT_BY_ID)) {
-            ps.setLong(1, id);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    user = mapper.mapToEntity(rs);
-                }
-            }
-        }
-
-        log.info("found {} by id {}", user, id);
-        return Optional.ofNullable(user);
-    }
-
-    @Override
-    @SneakyThrows
     public Optional<User> update(User user) {
         try (Connection connection = getConnection();
              PreparedStatement ps = connection.prepareStatement(UPDATE)) {
@@ -115,18 +72,6 @@ public class UserRepository implements Repository<User, Long> {
 
         log.info("{} successfully updated", user);
         return Optional.of(user);
-    }
-
-    @Override
-    @SneakyThrows
-    public void deleteById(Long id) {
-        try (Connection connection = getConnection();
-             PreparedStatement ps = connection.prepareStatement(DELETE)) {
-            ps.setLong(1, id);
-
-            ps.executeUpdate();
-        }
-        log.info("user with id {} deleted", id);
     }
 
     @SneakyThrows
@@ -146,5 +91,15 @@ public class UserRepository implements Repository<User, Long> {
 
         log.info("found {} by email {}", user, email);
         return Optional.ofNullable(user);
+    }
+
+    @Override
+    protected String getTableName() {
+        return "users";
+    }
+
+    @Override
+    protected Mapper<User> getMapper() {
+        return mapper;
     }
 }

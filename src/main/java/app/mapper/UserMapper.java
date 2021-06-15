@@ -9,8 +9,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 @Log4j2
-public class UserMapper {
+public class UserMapper implements Mapper<User> {
 
+    @Override
     @SneakyThrows
     public User mapToEntity(ResultSet rs) {
         log.info("mapping result set of {}", rs);

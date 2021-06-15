@@ -7,8 +7,9 @@ import lombok.extern.log4j.Log4j2;
 import java.sql.ResultSet;
 
 @Log4j2
-public class ProductMapper {
+public class ProductMapper implements Mapper<Product> {
 
+    @Override
     @SneakyThrows
     public Product mapToEntity(ResultSet rs) {
         log.info("mapping result set of {}", rs);
