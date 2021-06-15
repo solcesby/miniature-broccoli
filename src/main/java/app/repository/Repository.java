@@ -12,13 +12,14 @@ import java.util.List;
 import java.util.Optional;
 
 import static app.utils.ConnectionUtil.getConnection;
+import static java.lang.String.format;
 
 
 @Log4j2
 public abstract class Repository<T, ID> {
-    private final String selectAll = String.format("SELECT * FROM %s;", getTableName());
-    private final String selectById = String.format("SELECT * FROM %s WHERE id = ?;", getTableName());
-    private final String delete = String.format("DELETE " +
+    private static final String SELECT_ALL = "SELECT * FROM %s;";
+    private final String selectById = format("SELECT * FROM %s WHERE id = ?;", getTableName());
+    private final String delete = format("DELETE " +
             "FROM %s " +
             "WHERE id = ?;", getTableName());
 
@@ -27,7 +28,7 @@ public abstract class Repository<T, ID> {
         final List<T> list = new ArrayList<>();
 
         try (Connection connection = getConnection();
-             PreparedStatement ps = connection.prepareStatement(selectAll);
+             PreparedStatement ps = connection.prepareStatement(format(SELECT_ALL, getTableName()));
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 list.add(getMapper().mapToEntity(rs));
@@ -69,9 +70,7 @@ public abstract class Repository<T, ID> {
         log.info("element with id {} deleted from table '{}'", id, getTableName());
     }
 
-    protected String getTableName() {
-        return null;
-    }
+    protected abstract String getTableName();
 
     protected abstract Mapper<T> getMapper();
 }
