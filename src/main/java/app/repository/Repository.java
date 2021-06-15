@@ -45,8 +45,7 @@ public abstract class Repository<T, ID> {
 
         try (Connection connection = getConnection();
              PreparedStatement ps = connection.prepareStatement(selectById)) {
-            ps.setString(1, getTableName());
-            ps.setLong(2, (Long) id);
+            ps.setLong(1, (Long) id);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     found = getMapper().mapToEntity(rs);
@@ -63,8 +62,7 @@ public abstract class Repository<T, ID> {
     public void deleteById(ID id) {
         try (Connection connection = getConnection();
              PreparedStatement ps = connection.prepareStatement(delete)) {
-            ps.setString(1, getTableName());
-            ps.setLong(2, (Long) id);
+            ps.setLong(1, (Long) id);
 
             ps.executeUpdate();
         }
