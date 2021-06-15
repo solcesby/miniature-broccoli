@@ -1,10 +1,12 @@
 package app.utils.processor.impl.page;
 
 import app.utils.processor.Processor;
+import lombok.extern.log4j.Log4j2;
 
 import static app.utils.SecurityContextHolder.getCurrentUser;
 import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
 
+@Log4j2
 public class ProfilePageProcessor implements Processor {
     @Override
     public boolean supports(String command) {
@@ -21,5 +23,6 @@ public class ProfilePageProcessor implements Processor {
                     "Email: %s%n" +
                     "Role: %s%n", user.getId(), user.getName(), user.getLastName(), user.getEmail(), user.getRole());
         }
+        log.info("successfully showed profile of {}", user);
     }
 }

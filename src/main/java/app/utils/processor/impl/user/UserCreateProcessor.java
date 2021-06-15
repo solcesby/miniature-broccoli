@@ -1,18 +1,21 @@
 package app.utils.processor.impl.user;
 
 import app.entity.user.User;
-import app.service.UserService;
-import app.service.impl.UserServiceImpl;
+import app.service.impl.UserService;
 import app.utils.SecurityContextHolder;
 import app.utils.processor.Processor;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Scanner;
 
 import static app.entity.user.enums.Role.ADMIN;
 import static app.entity.user.enums.Role.USER;
+import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
+import static app.utils.validators.UserValidator.validate;
 
+@Log4j2
 public class UserCreateProcessor implements Processor {
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService = new UserService();
 
     @Override
     public boolean supports(String command) {
@@ -21,7 +24,7 @@ public class UserCreateProcessor implements Processor {
 
     @Override
     public void process(String command) {
-        if (isAdmin()) {
+        if (isCurrentUserSignedIn() && isAdmin()) {
             final Scanner sc = new Scanner(System.in);
 
             System.out.print("Name: ");
@@ -40,13 +43,17 @@ public class UserCreateProcessor implements Processor {
             final String password = sc.nextLine();
             System.out.println();
 
-            userService.save(User.builder()
+            final User userToSave = User.builder()
                     .name(name)
                     .lastName(lastName)
                     .email(email)
                     .password(password)
                     .role(USER)
-                    .build());
+                    .build();
+
+            validate(userToSave);
+
+            userService.save(userToSave);
         }
     }
 

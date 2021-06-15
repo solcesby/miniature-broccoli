@@ -1,17 +1,20 @@
 package app.utils.processor.impl.product;
 
 import app.entity.product.Product;
-import app.service.ProductService;
-import app.service.impl.ProductServiceImpl;
+import app.service.impl.ProductService;
 import app.utils.SecurityContextHolder;
 import app.utils.processor.Processor;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Scanner;
 
 import static app.entity.user.enums.Role.ADMIN;
+import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
+import static app.utils.validators.ProductValidator.validate;
 
+@Log4j2
 public class ProductUpdateProcessor implements Processor {
-    private final ProductService productService = new ProductServiceImpl();
+    private final ProductService productService = new ProductService();
 
     @Override
     public boolean supports(String command) {
@@ -20,7 +23,7 @@ public class ProductUpdateProcessor implements Processor {
 
     @Override
     public void process(String command) {
-        if (isAdmin()) {
+        if (isCurrentUserSignedIn() && isAdmin()) {
             final Long id = Long.parseLong(command.split(" ")[1]);
             final Product productToUpdate = productService.getById(id);
             final Scanner sc = new Scanner(System.in);
@@ -40,6 +43,8 @@ public class ProductUpdateProcessor implements Processor {
             productToUpdate.setName(name);
             productToUpdate.setPrice(price);
             productToUpdate.setDescription(description);
+
+            validate(productToUpdate);
 
             productService.update(productToUpdate);
         }

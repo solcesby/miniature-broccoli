@@ -1,17 +1,20 @@
 package app.utils.processor.impl.user;
 
 import app.entity.user.User;
-import app.service.UserService;
-import app.service.impl.UserServiceImpl;
+import app.service.impl.UserService;
 import app.utils.SecurityContextHolder;
 import app.utils.processor.Processor;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Scanner;
 
 import static app.entity.user.enums.Role.ADMIN;
+import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
+import static app.utils.validators.UserValidator.validate;
 
+@Log4j2
 public class UserUpdateProcessor implements Processor {
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService = new UserService();
 
     @Override
     public boolean supports(String command) {
@@ -20,7 +23,7 @@ public class UserUpdateProcessor implements Processor {
 
     @Override
     public void process(String command) {
-        if (isAdmin()) {
+        if (isCurrentUserSignedIn() && isAdmin()) {
             final Long id = Long.parseLong(command.split(" ")[1]);
             final User userToUpdate = userService.getById(id);
             final Scanner sc = new Scanner(System.in);
@@ -45,6 +48,8 @@ public class UserUpdateProcessor implements Processor {
             userToUpdate.setLastName(lastName);
             userToUpdate.setEmail(email);
             userToUpdate.setPassword(password);
+
+            validate(userToUpdate);
 
             userService.update(userToUpdate);
         }

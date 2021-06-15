@@ -1,15 +1,16 @@
 package app.utils.processor.impl.user;
 
-import app.service.UserService;
-import app.service.impl.UserServiceImpl;
+import app.service.impl.UserService;
 import app.utils.SecurityContextHolder;
 import app.utils.processor.Processor;
+import lombok.extern.log4j.Log4j2;
 
 import static app.entity.user.enums.Role.ADMIN;
+import static app.utils.SecurityContextHolder.isCurrentUserSignedIn;
 
+@Log4j2
 public class UserDeleteProcessor implements Processor {
-
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService = new UserService();
 
     @Override
     public boolean supports(String command) {
@@ -18,7 +19,7 @@ public class UserDeleteProcessor implements Processor {
 
     @Override
     public void process(String command) {
-        if (isAdmin()) {
+        if (isCurrentUserSignedIn() && isAdmin()) {
             final Long id = Long.parseLong(command.split(" ")[1]);
 
             userService.deleteById(id);

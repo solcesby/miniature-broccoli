@@ -1,17 +1,18 @@
 package app.utils.processor.impl.page;
 
 import app.entity.user.User;
-import app.service.UserService;
-import app.service.impl.UserServiceImpl;
+import app.service.impl.UserService;
 import app.utils.processor.Processor;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Optional;
 
 import static app.utils.LineReader.readLine;
 import static app.utils.SecurityContextHolder.setCurrentUser;
 
+@Log4j2
 public class SignInPageProcessor implements Processor {
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService = new UserService();
 
     @Override
     public boolean supports(String command) {
@@ -34,8 +35,9 @@ public class SignInPageProcessor implements Processor {
                 user -> {
                     if (password.equals(user.getPassword())) {
                         setCurrentUser(user);
+                        log.info("user {} signed in", user);
                     }
                 },
-                () -> System.out.println("Wrong password!"));
+                () -> System.out.println("Wrong email or password!"));
     }
 }
