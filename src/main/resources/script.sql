@@ -252,7 +252,19 @@ VALUES (2, 3);
 
 -- Queries
 -- Choose patients with only one visit.
-
+SELECT p.id,
+       name,
+       last_name,
+       date_of_birth,
+       initials,
+       status_id,
+       gender_id,
+       drug_type_id,
+       clinic_id
+FROM patients p
+         JOIN visits v on p.id = v.patient_id
+GROUP BY p.id
+HAVING count(patient_id) = 1;
 
 -- Choose patients who completed all visits.
 SELECT * FROM patients
@@ -285,10 +297,12 @@ GROUP BY statuses.name;
 
 
 -- Add Expiration Date to the drug units and fill that column.
-
+ALTER TABLE drug_units
+    ADD expiration_date date NOT NULL DEFAULT date '2025-01-01';
 
 -- Select the expired drug units.
-
+SELECT * FROM drug_units
+WHERE expiration_date < now();
 
 -- Write a SQL function to count the required number of drug units to complete the rest patients' visits at the specified clinic.
 -- Write a SQL function that will randomly choose the drug type and assign it to the specified patient.
