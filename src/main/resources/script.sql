@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS patients
 CREATE TABLE IF NOT EXISTS visits
 (
     id           BIGINT PRIMARY KEY UNIQUE NOT NULL DEFAULT nextval('visits_id_seq'),
-    last_visit   date,
+    date         date,
     drug_unit_id BIGINT                    NOT NULL,
     patient_id   BIGINT                    NOT NULL,
     FOREIGN KEY (drug_unit_id) REFERENCES drug_units (id),
@@ -202,40 +202,40 @@ VALUES ('Henry', 'Brown', date '1986-05-09', 'HB', 2, 1, 3, 1);
 INSERT INTO patients(name, last_name, date_of_birth, initials, status_id, gender_id, drug_type_id, clinic_id)
 VALUES ('Meri', 'Kihn', date '1955-07-10', 'MK', 4, 2, 3, 2);
 
-INSERT INTO visits(last_visit, drug_unit_id, patient_id)
+INSERT INTO visits(date, drug_unit_id, patient_id)
 VALUES (date '2020-11-13', 1, 7);
 
-INSERT INTO visits(last_visit, drug_unit_id, patient_id)
+INSERT INTO visits(date, drug_unit_id, patient_id)
 VALUES (date '2020-11-20', 1, 7);
 
-INSERT INTO visits(last_visit, drug_unit_id, patient_id)
+INSERT INTO visits(date, drug_unit_id, patient_id)
 VALUES (date '2020-11-13', 1, 8);
 
-INSERT INTO visits(last_visit, drug_unit_id, patient_id)
+INSERT INTO visits(date, drug_unit_id, patient_id)
 VALUES (date '2020-11-20', 1, 8);
 
-INSERT INTO visits(last_visit, drug_unit_id, patient_id)
+INSERT INTO visits(date, drug_unit_id, patient_id)
 VALUES (date '2020-11-13', 1, 9);
 
-INSERT INTO visits(last_visit, drug_unit_id, patient_id)
+INSERT INTO visits(date, drug_unit_id, patient_id)
 VALUES (date '2020-11-13', 1, 10);
 
-INSERT INTO visits(last_visit, drug_unit_id, patient_id)
+INSERT INTO visits(date, drug_unit_id, patient_id)
 VALUES (date '2020-11-13', 1, 11);
 
-INSERT INTO visits(last_visit, drug_unit_id, patient_id)
+INSERT INTO visits(date, drug_unit_id, patient_id)
 VALUES (date '2020-11-13', 1, 12);
 
-INSERT INTO visits(last_visit, drug_unit_id, patient_id)
+INSERT INTO visits(date, drug_unit_id, patient_id)
 VALUES (date '2020-11-20', 1, 11);
 
-INSERT INTO visits(last_visit, drug_unit_id, patient_id)
+INSERT INTO visits(date, drug_unit_id, patient_id)
 VALUES (date '2020-11-20', 1, 12);
 
-INSERT INTO visits(last_visit, drug_unit_id, patient_id)
+INSERT INTO visits(date, drug_unit_id, patient_id)
 VALUES (date '2020-11-27', 1, 11);
 
-INSERT INTO visits(last_visit, drug_unit_id, patient_id)
+INSERT INTO visits(date, drug_unit_id, patient_id)
 VALUES (date '2020-11-27', 1, 12);
 
 INSERT INTO clinics_drug_units(clinic_id, drug_unit_id)
@@ -253,55 +253,83 @@ VALUES (2, 3);
 -- Queries
 -- Choose patients with only one visit.
 SELECT p.id,
-       name,
-       last_name,
-       date_of_birth,
-       initials,
-       status_id,
-       gender_id,
-       drug_type_id,
-       clinic_id
+       p.name,
+       p.last_name,
+       p.date_of_birth,
+       p.initials,
+       p.status_id,
+       p.gender_id,
+       p.drug_type_id,
+       p.clinic_id
 FROM patients p
-         JOIN visits v on p.id = v.patient_id
+         LEFT OUTER JOIN visits v on p.id = v.patient_id
 GROUP BY p.id
-HAVING count(patient_id) = 1;
+HAVING count(v.patient_id) = 1;
 
 -- Choose patients who completed all visits.
-SELECT * FROM patients
+SELECT *
+FROM patients
 WHERE status_id = 4;
 
 -- Choose clinics with patients who performed at least one visit.
-
+SELECT DISTINCT ON (c.id) c.id, c.name, c.address1, c.address2
+FROM clinics c
+         JOIN patients p on c.id = p.clinic_id
+         JOIN visits v on p.id = v.patient_id
+GROUP BY c.id
+HAVING count(v.patient_id) >= 1;
 
 -- Choose clinics with no patients.
-
+SELECT *
+FROM clinics c
+         LEFT OUTER JOIN patients p on c.id = p.clinic_id
+WHERE p.id IS NULL;
 
 -- Choose clinics with patients who completed all visits.
-
+SELECT DISTINCT ON (c.id) c.id, c.name, c.address1, c.address2
+FROM clinics c
+         LEFT OUTER JOIN patients p on c.id = p.clinic_id
+WHERE p.status_id = 4;
 
 -- Show the number of visits performed at each clinic.
-
+SELECT DISTINCT ON (c.id) c.id, c.name, c.address1, c.address2, count(v.patient_id)
+FROM clinics c
+         JOIN patients p on c.id = p.clinic_id
+         JOIN visits v on p.id = v.patient_id
+GROUP BY c.id;
 
 -- Show the number of drugs of each type.
-
+SELECT dt.name, count(dt.name)
+FROM drug_types dt
+         JOIN drug_units du on dt.id = du.drug_type_id
+GROUP BY dt.name;
 
 -- Show the number of drugs of what type were dispensed.
-
+SELECT dt.name, count(dt.name)
+FROM drug_types dt
+         JOIN drug_units du on dt.id = du.drug_type_id
+         JOIN visits v on du.id = v.drug_unit_id
+GROUP BY dt.name;
 
 -- Show the number of patients of each status.
-SELECT statuses.name, count(*) number_of_patients FROM patients
-JOIN statuses on patients.status_id = statuses.id
+SELECT statuses.name, count(*) number_of_patients
+FROM patients
+         JOIN statuses on patients.status_id = statuses.id
 GROUP BY statuses.name;
 
 -- Select drug units of the drug type that was not dispensed for any patient.
-
+SELECT du.id, du.name, du.drug_type_id, du.expiration_date
+FROM drug_units du
+         LEFT OUTER JOIN visits v ON du.id = v.drug_unit_id
+WHERE v.id IS NULL;
 
 -- Add Expiration Date to the drug units and fill that column.
 ALTER TABLE drug_units
     ADD expiration_date date NOT NULL DEFAULT date '2025-01-01';
 
 -- Select the expired drug units.
-SELECT * FROM drug_units
+SELECT *
+FROM drug_units
 WHERE expiration_date < now();
 
 -- Write a SQL function to count the required number of drug units to complete the rest patients' visits at the specified clinic.
