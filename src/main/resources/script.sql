@@ -203,40 +203,40 @@ INSERT INTO patients(name, last_name, date_of_birth, initials, status_id, gender
 VALUES ('Meri', 'Kihn', date '1955-07-10', 'MK', 4, 2, 3, 2);
 
 INSERT INTO visits(date, drug_unit_id, patient_id)
-VALUES (date '2020-11-13', 1, 7);
+VALUES (date '2020-11-13', 1, 1);
 
 INSERT INTO visits(date, drug_unit_id, patient_id)
-VALUES (date '2020-11-20', 1, 7);
+VALUES (date '2020-11-20', 1, 1);
 
 INSERT INTO visits(date, drug_unit_id, patient_id)
-VALUES (date '2020-11-13', 1, 8);
+VALUES (date '2020-11-13', 1, 2);
 
 INSERT INTO visits(date, drug_unit_id, patient_id)
-VALUES (date '2020-11-20', 1, 8);
+VALUES (date '2020-11-20', 1, 2);
 
 INSERT INTO visits(date, drug_unit_id, patient_id)
-VALUES (date '2020-11-13', 1, 9);
+VALUES (date '2020-11-13', 1, 3);
 
 INSERT INTO visits(date, drug_unit_id, patient_id)
-VALUES (date '2020-11-13', 1, 10);
+VALUES (date '2020-11-13', 1, 4);
 
 INSERT INTO visits(date, drug_unit_id, patient_id)
-VALUES (date '2020-11-13', 1, 11);
+VALUES (date '2020-11-13', 1, 5);
 
 INSERT INTO visits(date, drug_unit_id, patient_id)
-VALUES (date '2020-11-13', 1, 12);
+VALUES (date '2020-11-13', 1, 6);
 
 INSERT INTO visits(date, drug_unit_id, patient_id)
-VALUES (date '2020-11-20', 1, 11);
+VALUES (date '2020-11-20', 1, 5);
 
 INSERT INTO visits(date, drug_unit_id, patient_id)
-VALUES (date '2020-11-20', 1, 12);
+VALUES (date '2020-11-20', 1, 6);
 
 INSERT INTO visits(date, drug_unit_id, patient_id)
-VALUES (date '2020-11-27', 1, 11);
+VALUES (date '2020-11-27', 1, 5);
 
 INSERT INTO visits(date, drug_unit_id, patient_id)
-VALUES (date '2020-11-27', 1, 12);
+VALUES (date '2020-11-27', 1, 6);
 
 INSERT INTO clinics_drug_units(clinic_id, drug_unit_id)
 VALUES (1, 1);
@@ -318,7 +318,7 @@ FROM patients
 GROUP BY statuses.name;
 
 -- Select drug units of the drug type that was not dispensed for any patient.
-SELECT du.id, du.name, du.drug_type_id, du.expiration_date
+SELECT du.id, du.name, du.drug_type_id
 FROM drug_units du
          LEFT OUTER JOIN visits v ON du.id = v.drug_unit_id
 WHERE v.id IS NULL;
@@ -333,5 +333,79 @@ FROM drug_units
 WHERE expiration_date < now();
 
 -- Write a SQL function to count the required number of drug units to complete the rest patients' visits at the specified clinic.
+CREATE OR REPLACE FUNCTION func1(param_clinic_id BIGINT)
+    RETURNS BIGINT
+    LANGUAGE plpgsql
+AS
+$$
+DECLARE
+    required_number_of_drug_units BIGINT;
+BEGIN
+    SELECT count(*)
+    INTO required_number_of_drug_units
+    FROM visits v
+             JOIN patients p on v.patient_id = p.id
+    WHERE p.clinic_id = param_clinic_id
+      AND v.drug_unit_id IS NULL;
+
+    RETURN required_number_of_drug_units;
+END;
+$$;
+
 -- Write a SQL function that will randomly choose the drug type and assign it to the specified patient.
+CREATE OR REPLACE FUNCTION func2(param_patient_id BIGINT)
+    RETURNS BIGINT
+    LANGUAGE plpgsql
+AS
+$$
+DECLARE
+    random_drug_type BIGINT;
+BEGIN
+    SELECT dt.id
+    INTO random_drug_type
+    FROM drug_types dt
+    ORDER BY random()
+    LIMIT 1;
+
+    UPDATE patients
+    SET drug_type_id = random_drug_type
+    WHERE id = param_patient_id;
+
+    -- Returns drug type id that was assigned to the patient
+    RETURN random_drug_type;
+END;
+$$;
+
 -- Write a SQL function that will randomly choose available drug unit of the specified drug type and assign it to the specified patient.
+CREATE OR REPLACE FUNCTION func3(param_drug_type_id BIGINT, param_patient_id BIGINT)
+    RETURNS BIGINT
+    LANGUAGE plpgsql
+AS
+$$
+DECLARE
+    random_drug_unit BIGINT;
+    clinic_id_var    BIGINT;
+BEGIN
+    SELECT p.clinic_id
+    INTO clinic_id_var
+    FROM patients p
+    WHERE p.id = param_patient_id;
+
+    SELECT cdu.drug_unit_id
+    INTO random_drug_unit
+    FROM clinics_drug_units cdu
+             JOIN drug_units du ON du.id = cdu.drug_unit_id
+    WHERE cdu.clinic_id = clinic_id_var
+      AND du.drug_type_id = param_drug_type_id
+    ORDER BY random()
+    LIMIT 1;
+
+    UPDATE visits
+    SET drug_unit_id = random_drug_unit
+    WHERE patient_id = param_patient_id
+      AND drug_unit_id IS NULL;
+
+    -- Returns drug unit id that was assigned to the patient
+    RETURN random_drug_unit;
+END;
+$$;
