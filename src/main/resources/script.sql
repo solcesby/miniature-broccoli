@@ -332,6 +332,9 @@ SELECT *
 FROM drug_units
 WHERE expiration_date < now();
 
+-- Add indexes
+CREATE INDEX ON drug_units(expiration_date);
+
 -- Write a SQL function to count the required number of drug units to complete the rest patients' visits at the specified clinic.
 CREATE OR REPLACE FUNCTION func1(param_clinic_id BIGINT)
     RETURNS BIGINT
