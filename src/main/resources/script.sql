@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS visits
     FOREIGN KEY (patient_id) REFERENCES patients (id)
 );
 
--- Updating autoincrement sequence
+-- Updating autoincrement sequences
 ALTER SEQUENCE clinics_id_seq
     OWNED BY clinics.id;
 
