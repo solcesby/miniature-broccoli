@@ -9,11 +9,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
-import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @Entity
@@ -24,7 +25,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class CustomerEntity {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue
     private UUID id;
 
     @Column(name = "first_name")
@@ -46,9 +47,8 @@ public class CustomerEntity {
     @Column(name = "birth_date")
     private Date birthDate;
 
-    @OneToMany(mappedBy = "customer",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private List<OrderEntity> orders;
+    @Builder.Default
+    @OneToMany(mappedBy = "customer", cascade = ALL, orphanRemoval = true)
+    private Set<OrderEntity> orders = new HashSet<>();
 
 }

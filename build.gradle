@@ -12,17 +12,22 @@ repositories {
 
 ext {
     hibernateVersion = '5.5.3.Final'
-    hibernateValidatorVersion = '7.0.1.Final'
+    hibernateValidatorVersion = '6.2.0.Final'
     lombokVersion = '1.18.20'
     postgresqlVersion = '42.2.23'
+    mapstructVersion = '1.4.2.Final'
 }
 
 dependencies {
     implementation "org.hibernate:hibernate-core:$hibernateVersion"
     implementation "org.hibernate:hibernate-entitymanager:$hibernateVersion"
-//    implementation "org.hibernate.validator:hibernate-validator:$hibernateValidatorVersion"
+    implementation "org.hibernate.validator:hibernate-validator:$hibernateValidatorVersion"
     implementation "org.postgresql:postgresql:$postgresqlVersion"
+    implementation "org.mapstruct:mapstruct:$mapstructVersion"
+    implementation 'com.github.javafaker:javafaker:1.0.2'
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
+
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
 }

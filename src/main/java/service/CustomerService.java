@@ -1,14 +1,26 @@
 package service;
 
 import entity.customer.CustomerEntity;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import utils.HibernateUtil;
 
-public class CustomerService {
+import java.util.List;
+import java.util.UUID;
 
-    public void saveCustomer(final CustomerEntity customer) {
+public interface CustomerService {
 
-    }
+    CustomerEntity get(UUID id);
+
+    List<CustomerEntity> getAll();
+
+    CustomerEntity getWithBiggestCountOfOrders();
+
+    CustomerEntity getWithBiggestSumOfOrders();
+
+    CustomerEntity getWithBiggestAverageTotalOfOrders();
+
+    CustomerEntity update(CustomerEntity customer);
+
+    CustomerEntity create(CustomerEntity customer);
+
+    void deleteById(UUID id);
 
 }
