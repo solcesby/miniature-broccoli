@@ -2,10 +2,8 @@ package entity.customer;
 
 import entity.customer.enums.CustomerGenderEntity;
 import entity.order.OrderEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.apache.commons.lang3.builder.ToStringExclude;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -48,6 +46,7 @@ public class CustomerEntity {
     private Date birthDate;
 
     @Builder.Default
+    @ToString.Exclude
     @OneToMany(mappedBy = "customer", cascade = ALL, orphanRemoval = true)
     private Set<OrderEntity> orders = new HashSet<>();
 

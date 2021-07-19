@@ -8,9 +8,7 @@ import entity.product.ProductEntity;
 import entity.productcategory.ProductCategoryEntity;
 import service.*;
 import service.impl.*;
-import java.time.LocalDateTime;
 
-import java.time.DateTimeException;
 import java.util.Date;
 import java.util.Random;
 import java.util.Set;
@@ -70,20 +68,17 @@ public class Main {
                     .count(count)
                     .build();
 
-//            productCategoryService.create(productCategory);
             customerService.create(customer);
-//            productService.create(product);
-//            orderService.create(order);
             orderDetailsService.create(orderDetails);
             productId = product.getId();
         }
 
         StatisticService service = new StatisticServiceImpl();
 
-        System.out.printf("getAllOrdersInTheLastTwoWeeks%n%s",service.getAllOrdersInTheLastTwoWeeks());
-        System.out.printf("getCustomerWithBiggestOrderHistoryInTheLastMonthBySumOfOrders%n%s", service.getCustomerWithBiggestOrderHistoryInTheLastMonthBySumOfOrders());
-        System.out.printf("getCustomerWithBiggestOrderHistoryInTheLastMonthByAverageTotalOfOrders%n%s", service.getCustomerWithBiggestOrderHistoryInTheLastMonthByAverageTotalOfOrders());
-        System.out.printf("getCustomerWithBiggestOrderHistoryInTheLastMonthByCountOfOrders%n%s", service.getCustomerWithBiggestOrderHistoryInTheLastMonthByCountOfOrders());
+        System.out.printf("getAllOrdersInTheLastTwoWeeks%n%s%n", service.getAllOrdersInTheLastTwoWeeks());
+        System.out.printf("getCustomerWithBiggestOrderHistoryInTheLastMonthBySumOfOrders%n%s%n", service.getCustomerWithBiggestOrderHistoryInTheLastMonthBySumOfOrders());
+        System.out.printf("getCustomerWithBiggestOrderHistoryInTheLastMonthByAverageTotalOfOrders%n%s%n", service.getCustomerWithBiggestOrderHistoryInTheLastMonthByAverageTotalOfOrders());
+        System.out.printf("getCustomerWithBiggestOrderHistoryInTheLastMonthByCountOfOrders%n%s%n", service.getCustomerWithBiggestOrderHistoryInTheLastMonthByCountOfOrders());
         System.out.printf("getTheMostPopularProductInTheStoreFromDate%n%s", service.getTheMostPopularProductInTheStoreFromDate(new Date(2014, 6, 12)));
         System.out.printf("getCountOfOrdersWithProductFromDate%n%s", service.getCountOfOrdersWithProductFromDate(productId, new Date(2014, 6, 12)));
         System.out.printf("getAveragePriceOfOrdersInTheLastMonth%n%s", service.getAveragePriceOfOrdersInTheLastMonth());

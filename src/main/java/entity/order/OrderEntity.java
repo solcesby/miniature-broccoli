@@ -2,10 +2,7 @@ package entity.order;
 
 import entity.customer.CustomerEntity;
 import entity.order.enums.OrderStatusEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -29,6 +26,7 @@ public class OrderEntity {
     @Column(name = "order_number")
     private Long orderNumber;
 
+    @ToString.Exclude
     @ManyToOne(fetch = LAZY)
     private CustomerEntity customer;
 

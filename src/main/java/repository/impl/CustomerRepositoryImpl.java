@@ -44,9 +44,10 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         return Optional.of(em.createQuery(
                 "SELECT c " +
                         "FROM CustomerEntity c " +
-                        "INNER JOIN c.orders o " +
-                        "GROUP BY c.id " +
-                        "ORDER BY max(o.totalPrice) DESC", CustomerEntity.class)
+                        "INNER JOIN c.orders AS o " +
+                        "GROUP BY c.id, o.id " +
+                        "ORDER BY sum(o.totalPrice) DESC "
+                , CustomerEntity.class)
                 .getResultList().get(0));
     }
 
