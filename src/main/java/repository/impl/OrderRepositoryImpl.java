@@ -5,6 +5,7 @@ import repository.OrderRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -50,7 +51,8 @@ public class OrderRepositoryImpl implements OrderRepository {
                 "SELECT o " +
                         "FROM OrderEntity o " +
                         "WHERE o.orderDate >= :date", OrderEntity.class)
-                .setParameter("date", calendar.getTime())
+                .setParameter("date",
+                        calendar.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
                 .getResultList();
     }
 
@@ -62,7 +64,8 @@ public class OrderRepositoryImpl implements OrderRepository {
                 "SELECT avg(o.totalPrice) " +
                         "FROM OrderEntity o " +
                         "WHERE o.orderDate >= :date")
-                .setParameter("date", calendar.getTime())
+                .setParameter("date",
+                        calendar.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
                 .getSingleResult());
     }
 

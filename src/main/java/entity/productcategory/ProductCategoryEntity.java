@@ -1,10 +1,7 @@
 package entity.productcategory;
 
 import entity.product.ProductEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -27,6 +24,8 @@ public class ProductCategoryEntity {
     private String categoryName;
 
     @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "categories")
     private Set<ProductEntity> products = new HashSet<>();
 }

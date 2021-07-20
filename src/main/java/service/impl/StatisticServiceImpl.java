@@ -6,6 +6,7 @@ import entity.orderdetails.OrderDetailsEntity;
 import entity.product.ProductEntity;
 import service.*;
 
+import java.time.LocalDateTime;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,12 +60,12 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
-    public ProductEntity getTheMostPopularProductInTheStoreFromDate(Date date) {
+    public ProductEntity getTheMostPopularProductInTheStoreFromDate(LocalDateTime date) {
         return productService.getTheMostPopularProductFromDate(date);
     }
 
     @Override
-    public Long getCountOfOrdersWithProductFromDate(UUID productId, Date date) {
+    public Long getCountOfOrdersWithProductFromDate(UUID productId, LocalDateTime date) {
         return orderDetailsService.getCountOfOrdersWithProductFromDate(productId, date);
     }
 

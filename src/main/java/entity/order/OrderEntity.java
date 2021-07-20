@@ -5,7 +5,7 @@ import entity.order.enums.OrderStatusEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static javax.persistence.EnumType.STRING;
@@ -27,11 +27,12 @@ public class OrderEntity {
     private Long orderNumber;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = LAZY)
     private CustomerEntity customer;
 
     @Column(name = "order_date")
-    private Date orderDate;
+    private LocalDateTime orderDate;
 
     @Column(name = "total_price")
     private Double totalPrice;

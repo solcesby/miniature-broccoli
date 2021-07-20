@@ -2,6 +2,7 @@ package service;
 
 import entity.product.ProductEntity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,7 @@ public interface ProductService {
 
     List<ProductEntity> getAll();
 
-    ProductEntity getTheMostPopularProductFromDate(Date date);
+    ProductEntity getTheMostPopularProductFromDate(LocalDateTime date);
 
     ProductEntity update(ProductEntity product);
 

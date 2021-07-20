@@ -5,6 +5,7 @@ import entity.order.OrderEntity;
 import entity.orderdetails.OrderDetailsEntity;
 import entity.product.ProductEntity;
 
+import java.time.LocalDateTime;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Date;
 import java.util.List;
@@ -20,9 +21,9 @@ public interface StatisticService {
 
     SimpleImmutableEntry<CustomerEntity, List<OrderEntity>> getCustomerWithBiggestOrderHistoryInTheLastMonthByCountOfOrders();
 
-    ProductEntity getTheMostPopularProductInTheStoreFromDate(Date date);
+    ProductEntity getTheMostPopularProductInTheStoreFromDate(LocalDateTime date);
 
-    Long getCountOfOrdersWithProductFromDate(UUID productId, Date date);
+    Long getCountOfOrdersWithProductFromDate(UUID productId, LocalDateTime date);
 
     Double getAveragePriceOfOrdersInTheLastMonth();
 

@@ -4,6 +4,7 @@ package repository;
 import entity.orderdetails.OrderDetailsEntity;
 import entity.product.ProductEntity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public interface OrderDetailsRepository {
 
     List<OrderDetailsEntity> getByOrderId(UUID id);
 
-    Optional<Long> getCountOfOrdersWithProductFromDate(UUID productId, Date date);
+    Optional<Long> getCountOfOrdersWithProductFromDate(UUID productId, LocalDateTime date);
 
     Optional<OrderDetailsEntity> update(OrderDetailsEntity orderDetailsEntity);
 

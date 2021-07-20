@@ -6,10 +6,16 @@ import entity.order.enums.OrderStatusEntity;
 import entity.orderdetails.OrderDetailsEntity;
 import entity.product.ProductEntity;
 import entity.productcategory.ProductCategoryEntity;
-import service.*;
-import service.impl.*;
+import service.CustomerService;
+import service.OrderDetailsService;
+import service.StatisticService;
+import service.impl.CustomerServiceImpl;
+import service.impl.OrderDetailsServiceImpl;
+import service.impl.StatisticServiceImpl;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -21,10 +27,7 @@ import static entity.order.enums.OrderStatusEntity.*;
 public class Main {
     public static void main(String[] args) {
         Faker faker = new Faker();
-        ProductCategoryService productCategoryService = new ProductCategoryServiceImpl();
         CustomerService customerService = new CustomerServiceImpl();
-        ProductService productService = new ProductServiceImpl();
-        OrderService orderService = new OrderServiceImpl();
         OrderDetailsService orderDetailsService = new OrderDetailsServiceImpl();
 
         UUID productId = UUID.randomUUID();
@@ -41,7 +44,7 @@ public class Main {
                     .lastName(faker.name().lastName())
                     .email(faker.internet().emailAddress())
                     .address(faker.address().streetAddress())
-                    .birthDate(faker.date().birthday())
+                    .birthDate(LocalDateTime.now())
                     .gender(generateGender())
                     .build();
 
@@ -52,10 +55,11 @@ public class Main {
                     .description(faker.lorem().sentence())
                     .build();
 
+
             OrderEntity order = OrderEntity.builder()
                     .orderNumber(new Random().nextLong())
                     .customer(customer)
-                    .orderDate(faker.date().between(customer.getBirthDate(), new Date()))
+                    .orderDate(LocalDate.of(2021, 6, 25).atTime(LocalTime.now()))
                     .totalPrice(Double.parseDouble(String.format("%.2f", count * product.getPrice())))
                     .deliveryAddress(customer.getAddress())
                     .status(generateStatus())
@@ -79,9 +83,11 @@ public class Main {
         System.out.printf("getCustomerWithBiggestOrderHistoryInTheLastMonthBySumOfOrders%n%s%n", service.getCustomerWithBiggestOrderHistoryInTheLastMonthBySumOfOrders());
         System.out.printf("getCustomerWithBiggestOrderHistoryInTheLastMonthByAverageTotalOfOrders%n%s%n", service.getCustomerWithBiggestOrderHistoryInTheLastMonthByAverageTotalOfOrders());
         System.out.printf("getCustomerWithBiggestOrderHistoryInTheLastMonthByCountOfOrders%n%s%n", service.getCustomerWithBiggestOrderHistoryInTheLastMonthByCountOfOrders());
-        System.out.printf("getTheMostPopularProductInTheStoreFromDate%n%s", service.getTheMostPopularProductInTheStoreFromDate(new Date(2014, 6, 12)));
-        System.out.printf("getCountOfOrdersWithProductFromDate%n%s", service.getCountOfOrdersWithProductFromDate(productId, new Date(2014, 6, 12)));
-        System.out.printf("getAveragePriceOfOrdersInTheLastMonth%n%s", service.getAveragePriceOfOrdersInTheLastMonth());
+        System.out.printf("getAveragePriceOfOrdersInTheLastMonth%n%s%n", service.getAveragePriceOfOrdersInTheLastMonth());
+        System.out.printf("getTheMostPopularProductInTheStoreFromDate%n%s%n", service.getTheMostPopularProductInTheStoreFromDate(LocalDate.of(2014, 1, 1).atTime(LocalTime.now())));
+        System.out.printf("getCountOfOrdersWithProductFromDate%n%s%n", service.getCountOfOrdersWithProductFromDate(productId, LocalDate.of(2014, 1, 1).atTime(LocalTime.now())));
+        System.out.println("PRODUCT ID = " + productId);
+        System.out.println(LocalDate.of(2014, 1, 1).atTime(LocalTime.now()));
     }
 
     private static CustomerGenderEntity generateGender() {

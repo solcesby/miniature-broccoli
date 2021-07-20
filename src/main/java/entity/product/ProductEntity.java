@@ -2,10 +2,7 @@ package entity.product;
 
 import entity.orderdetails.OrderDetailsEntity;
 import entity.productcategory.ProductCategoryEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -44,6 +41,8 @@ public class ProductEntity {
     private String description;
 
     @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "products")
     private Set<OrderDetailsEntity> orderDetails = new HashSet<>();
 

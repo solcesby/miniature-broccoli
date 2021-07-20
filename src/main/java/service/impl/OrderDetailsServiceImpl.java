@@ -5,6 +5,7 @@ import repository.OrderDetailsRepository;
 import repository.impl.OrderDetailsRepositoryImpl;
 import service.OrderDetailsService;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -29,7 +30,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
     }
 
     @Override
-    public Long getCountOfOrdersWithProductFromDate(UUID productId, Date date) {
+    public Long getCountOfOrdersWithProductFromDate(UUID productId, LocalDateTime date) {
         return orderDetailsRepository.getCountOfOrdersWithProductFromDate(productId, date).orElseThrow();
     }
 

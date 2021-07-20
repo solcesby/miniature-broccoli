@@ -5,6 +5,7 @@ import repository.ProductRepository;
 import repository.impl.ProductRepositoryImpl;
 import service.ProductService;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +25,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductEntity getTheMostPopularProductFromDate(Date date) {
+    public ProductEntity getTheMostPopularProductFromDate(LocalDateTime date) {
         return productRepository.getTheMostPopularProductFromDate(date).orElseThrow();
     }
 

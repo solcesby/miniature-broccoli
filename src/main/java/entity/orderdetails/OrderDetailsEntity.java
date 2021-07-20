@@ -35,8 +35,8 @@ public class OrderDetailsEntity {
     @Builder.Default
     @ManyToMany(cascade = {PERSIST, MERGE})
     @JoinTable(name = "order_details_product",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_details_id"))
+            joinColumns = @JoinColumn(name = "order_details_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<ProductEntity> products = new HashSet<>();
 
     @Column(name = "count")

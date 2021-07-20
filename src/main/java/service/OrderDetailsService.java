@@ -3,6 +3,7 @@ package service;
 import entity.orderdetails.OrderDetailsEntity;
 import entity.product.ProductEntity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,7 @@ public interface OrderDetailsService {
 
     List<OrderDetailsEntity> getByOrderId(UUID id);
 
-    Long getCountOfOrdersWithProductFromDate(UUID productId, Date date);
+    Long getCountOfOrdersWithProductFromDate(UUID productId, LocalDateTime date);
 
     OrderDetailsEntity update(OrderDetailsEntity orderDetails);
 

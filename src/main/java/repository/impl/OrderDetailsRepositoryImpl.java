@@ -5,7 +5,7 @@ import repository.OrderDetailsRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,11 +41,12 @@ public class OrderDetailsRepositoryImpl implements OrderDetailsRepository {
     }
 
     @Override
-    public Optional<Long> getCountOfOrdersWithProductFromDate(UUID productId, Date date) {
+    public Optional<Long> getCountOfOrdersWithProductFromDate(UUID productId, LocalDateTime date) {
         return Optional.of((Long) em.createQuery(
                 "SELECT count(od) " +
                         "FROM OrderDetailsEntity od " +
-                        "WHERE od.id = :id AND od.order.orderDate >= :date")
+                        "INNER JOIN od.products p " +
+                        "WHERE p.id = :id AND od.order.orderDate >= :date")
                 .setParameter("id", productId)
                 .setParameter("date", date)
                 .getSingleResult());

@@ -5,7 +5,9 @@ import repository.ProductRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Date;
+import javax.persistence.TemporalType;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,15 +33,16 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Optional<ProductEntity> getTheMostPopularProductFromDate(Date date) {
-        return Optional.of((ProductEntity) em.createQuery(
-                "SELECT max(count(p)) " +
+    public Optional<ProductEntity> getTheMostPopularProductFromDate(LocalDateTime date) {
+        return Optional.of(em.createQuery(
+                "SELECT p " +
                         "FROM ProductEntity p " +
-                        "INNER JOIN OrderDetailsEntity od " +
-                        "GROUP BY od.id " +
-                        "HAVING od.order.orderDate >= :date")
+                        "INNER JOIN p.orderDetails od " +
+                        "GROUP BY p.id, od.order.id, od.order.orderDate " +
+                        "HAVING od.order.orderDate >= :date " +
+                        "ORDER BY count(p) DESC", ProductEntity.class)
                 .setParameter("date", date)
-                .getSingleResult());
+                .getResultList().get(0));
     }
 
     @Override

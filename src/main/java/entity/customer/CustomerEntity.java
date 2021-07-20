@@ -3,9 +3,9 @@ package entity.customer;
 import entity.customer.enums.CustomerGenderEntity;
 import entity.order.OrderEntity;
 import lombok.*;
-import org.apache.commons.lang3.builder.ToStringExclude;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,10 +43,9 @@ public class CustomerEntity {
     private CustomerGenderEntity gender;
 
     @Column(name = "birth_date")
-    private Date birthDate;
+    private LocalDateTime birthDate;
 
     @Builder.Default
-    @ToString.Exclude
     @OneToMany(mappedBy = "customer", cascade = ALL, orphanRemoval = true)
     private Set<OrderEntity> orders = new HashSet<>();
 
