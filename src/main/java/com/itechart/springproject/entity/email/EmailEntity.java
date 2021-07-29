@@ -22,7 +22,7 @@ public class EmailEntity {
     private UUID id;
 
     @Column(name = "email_address")
-    private String emailAddress;
+    private String recipientEmailAddress;
 
     @Column(name = "last_sent_at")
     private LocalDateTime lastSentAt;

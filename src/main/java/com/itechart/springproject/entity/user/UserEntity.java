@@ -1,5 +1,6 @@
 package com.itechart.springproject.entity.user;
 
+import com.itechart.springproject.entity.email.EmailEntity;
 import com.itechart.springproject.entity.user.enums.UserRoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -50,4 +52,6 @@ public class UserEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @Transient
+    private List<EmailEntity> recipientEmails;
 }
