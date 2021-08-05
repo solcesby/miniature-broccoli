@@ -1,7 +1,6 @@
 package com.itechart.springproject.entity.user;
 
 import com.itechart.springproject.entity.email.EmailEntity;
-import com.itechart.springproject.entity.user.enums.UserRoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +10,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Data
 @Entity
@@ -24,8 +25,7 @@ public class UserEntity {
     @GeneratedValue
     private UUID id;
 
-    @Column(name = "role")
-    @Enumerated(EnumType.STRING)
+    @OneToOne(mappedBy = "user", cascade = ALL)
     private UserRoleEntity role;
 
     @Column(name = "first_name")
