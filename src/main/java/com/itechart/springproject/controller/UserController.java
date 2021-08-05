@@ -5,11 +5,12 @@ import com.itechart.springproject.dto.user.UserDTO;
 import com.itechart.springproject.dto.user.UserUpdateDTO;
 import com.itechart.springproject.service.UserService;
 import io.swagger.annotations.ApiParam;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +18,7 @@ import java.util.UUID;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController implements UserControllerInfo {
 
@@ -32,6 +33,7 @@ public class UserController implements UserControllerInfo {
     }
 
     @GetMapping
+    @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<List<UserDTO>> getAllUsers(
             @RequestParam(value = "page") final Integer page,
             @RequestParam(value = "size") final Integer size) {
@@ -40,6 +42,7 @@ public class UserController implements UserControllerInfo {
     }
 
     @GetMapping("/active")
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public ResponseEntity<List<UserDTO>> getAllActiveUsers(
             @RequestParam(value = "page") final Integer page,
             @RequestParam(value = "size") final Integer size) {
@@ -48,6 +51,7 @@ public class UserController implements UserControllerInfo {
     }
 
     @GetMapping("/{id}")
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public ResponseEntity<UserDTO> getUserById(
             @ApiParam(value = "Id of user to lookup for", required = true)
             @PathVariable final UUID id) {
@@ -56,6 +60,7 @@ public class UserController implements UserControllerInfo {
     }
 
     @PutMapping
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public ResponseEntity<UserDTO> updateUser(
             @ApiParam(value = "Required UserUpdateDTO instance", required = true)
             @Valid @RequestBody final UserUpdateDTO userUpdateDTO) {
@@ -64,6 +69,7 @@ public class UserController implements UserControllerInfo {
     }
 
     @DeleteMapping(value = "/{id}")
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     public ResponseEntity<Void> deleteUser(
             @PathVariable final UUID id) {
         userService.delete(id);
