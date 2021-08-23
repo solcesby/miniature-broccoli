@@ -5,6 +5,7 @@ import com.itechart.springproject.dto.user.UserDTO;
 import com.itechart.springproject.dto.user.UserUpdateDTO;
 import com.itechart.springproject.entity.user.UserEntity;
 import com.itechart.springproject.entity.user.UserRoleEntity;
+import com.itechart.springproject.mapper.UserMapper;
 import com.itechart.springproject.repository.UserRepository;
 import com.itechart.springproject.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,6 @@ import javax.persistence.EntityNotFoundException;
 import java.util.UUID;
 
 import static com.itechart.springproject.entity.user.enums.RoleEntity.ROLE_USER;
-import static com.itechart.springproject.mapper.UserMapper.USER_MAPPER;
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
 
@@ -30,15 +30,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @Override
     @Transactional
     public UserDTO create(final UserCreateDTO userCreateDTO) {
-        final UserEntity user = USER_MAPPER.toEntity(userCreateDTO);
-        user.setFirstName(userCreateDTO.getFirstName());
-        user.setLastName(userCreateDTO.getLastName());
-        user.setPhone(userCreateDTO.getPhone());
-        user.setEmail(userCreateDTO.getEmail());
+        final UserEntity user = userMapper.toEntity(userCreateDTO);
         user.setRole(generateDefaultRole(user));
         user.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
         user.setCreatedAt(now());
@@ -46,29 +43,34 @@ public class UserServiceImpl implements UserService {
         throwIfUserExists(user);
 
         final UserEntity saved = userRepository.save(user);
-        return USER_MAPPER.toDTO(saved);
+        return userMapper.toDTO(saved);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<UserDTO> findAll(final Integer page, final Integer size) {
         final Pageable pageable = PageRequest.of(page, size);
-        return userRepository.findAll(pageable).map(USER_MAPPER::toDTO);
+        return userRepository.findAll(pageable).map(userMapper::toDTO);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<UserDTO> findAllActive(Integer page, Integer size) {
         final Pageable pageable = PageRequest.of(page, size);
-        return userRepository.findAllByDeletedAtIsNull(pageable).map(USER_MAPPER::toDTO);
+        return userRepository.findAllByDeletedAtIsNull(pageable).map(userMapper::toDTO);
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserDTO get(final UUID id) {
-        final UserEntity user = userRepository.findById(id)
+        return userRepository.findById(id).map(userMapper::toDTO)
                 .orElseThrow(() -> new EntityNotFoundException(format("User with id: %s not found", id)));
-        return USER_MAPPER.toDTO(user);
+    }
+
+    @Override
+    public UserDTO findByEmail(String email) {
+        return userRepository.findByEmail(email).map(userMapper::toDTO)
+                .orElseThrow(() -> new EntityNotFoundException(format("User with email: %s not found", email)));
     }
 
     @Override
@@ -84,7 +86,7 @@ public class UserServiceImpl implements UserService {
         user.setUpdatedAt(now());
 
         final UserEntity updated = userRepository.save(user);
-        return USER_MAPPER.toDTO(updated);
+        return userMapper.toDTO(updated);
     }
 
     @Override

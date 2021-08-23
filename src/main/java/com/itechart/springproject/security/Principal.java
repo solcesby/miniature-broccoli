@@ -3,6 +3,7 @@ package com.itechart.springproject.security;
 import com.itechart.springproject.entity.user.UserEntity;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 public class Principal implements UserDetails {
+    @ToString.Exclude
     private final UserEntity user;
 
     @Override
