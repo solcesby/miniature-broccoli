@@ -22,6 +22,7 @@ ext {
     swaggerVersion = '3.0.0'
     lombokVersion = '1.18.20'
     mapstructVersion = '1.4.2.Final'
+    jwtVersion = '0.9.1'
 }
 
 dependencies {
@@ -36,6 +37,7 @@ dependencies {
     implementation "io.springfox:springfox-swagger2:$swaggerVersion"
     implementation "io.springfox:springfox-boot-starter:$swaggerVersion"
     implementation "org.mapstruct:mapstruct:$mapstructVersion"
+    implementation "io.jsonwebtoken:jjwt:$jwtVersion"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
 
