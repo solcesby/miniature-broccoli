@@ -4,18 +4,21 @@ import com.itechart.springproject.config.quartz.job.SendEmailJob;
 import com.itechart.springproject.dto.email.EmailRequest;
 import com.itechart.springproject.service.EmailService;
 import com.itechart.springproject.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.quartz.JobDataMap;
 import org.quartz.Scheduler;
 import org.quartz.impl.JobDetailImpl;
-import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.triggers.CronTriggerImpl;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class ScheduleServiceImpl {
+
+    private final Scheduler scheduler;
 
     @SneakyThrows
     public void scheduleMailing(EmailRequest request, EmailService emailService, UserService userService) {
@@ -36,8 +39,6 @@ public class ScheduleServiceImpl {
         jobDataMap.put("emailService", emailService);
         jobDataMap.put("userService", userService);
 
-        Scheduler scheduler = new StdSchedulerFactory().getScheduler();
-        scheduler.start();
         scheduler.scheduleJob(jobDetail, cronTrigger);
     }
 }
