@@ -22,7 +22,8 @@ ext {
     swaggerVersion = '3.0.0'
     lombokVersion = '1.18.20'
     mapstructVersion = '1.4.2.Final'
-    jwtVersion = '0.9.1'
+    testcontainerPostgresVersion = '1.15.3'
+    fakerVersion = '1.0.2'
 }
 
 dependencies {
@@ -32,12 +33,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-quartz'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation "io.springfox:springfox-swagger2:$swaggerVersion"
     implementation "io.springfox:springfox-boot-starter:$swaggerVersion"
     implementation "org.mapstruct:mapstruct:$mapstructVersion"
-    implementation "io.jsonwebtoken:jjwt:$jwtVersion"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
 
@@ -51,6 +52,12 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    testImplementation "org.testcontainers:testcontainers:$testcontainerPostgresVersion"
+    testImplementation "org.testcontainers:postgresql:$testcontainerPostgresVersion"
+
+    testImplementation "com.github.javafaker:javafaker:$fakerVersion"
+//    testAnnotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
 }
 
 test {

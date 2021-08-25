@@ -22,6 +22,17 @@ public interface UserMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "deletedAt", ignore = true)
     @Mapping(target = "recipientEmails", ignore = true)
+    @Mapping(target = "recipients", ignore = true)
     UserEntity toEntity(UserCreateDTO userCreateDTO);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "recipients", ignore = true)
+    @Mapping(target = "recipientEmails", ignore = true)
+    UserEntity toEntity(UserDTO userDTO);
 
 }

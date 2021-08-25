@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import static javax.persistence.CascadeType.ALL;
@@ -53,5 +54,9 @@ public class UserEntity {
     private LocalDateTime deletedAt;
 
     @Transient
-    private List<EmailEntity> recipientEmails;
+    private Set<String> recipients;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "sender", orphanRemoval = true)
+    private Set<EmailEntity> recipientEmails = new HashSet<>();
 }
