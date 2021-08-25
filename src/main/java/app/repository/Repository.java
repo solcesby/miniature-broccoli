@@ -17,7 +17,7 @@ import static java.lang.String.format;
 
 @Log4j2
 public abstract class Repository<T, ID> {
-    private static final String SELECT_ALL = "SELECT * FROM %s;";
+    private final String selectAll = format("SELECT * FROM %s;", getTableName());
     private final String selectById = format("SELECT * FROM %s WHERE id = ?;", getTableName());
     private final String delete = format("DELETE " +
             "FROM %s " +
@@ -28,7 +28,7 @@ public abstract class Repository<T, ID> {
         final List<T> list = new ArrayList<>();
 
         try (Connection connection = getConnection();
-             PreparedStatement ps = connection.prepareStatement(format(SELECT_ALL, getTableName()));
+             PreparedStatement ps = connection.prepareStatement(selectAll);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 list.add(getMapper().mapToEntity(rs));
