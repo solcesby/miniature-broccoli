@@ -8,4 +8,13 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
+  mail:
+    host: smtp.mailtrap.io
+    port: 2525
+    username: c5a4a04c55b430
+    password: fd19ecb4fbb710
+    properties:
+      mail:
+        smtp:
+          starttls: true
