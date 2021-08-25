@@ -2,11 +2,13 @@ package entity.customer;
 
 import entity.customer.enums.CustomerGenderEntity;
 import entity.order.OrderEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -48,5 +50,4 @@ public class CustomerEntity {
     @Builder.Default
     @OneToMany(mappedBy = "customer", cascade = ALL, orphanRemoval = true)
     private Set<OrderEntity> orders = new HashSet<>();
-
 }
